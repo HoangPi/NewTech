@@ -62,3 +62,20 @@ export const addComment = async (event, id, comment) =>{
 
     }
 }
+export const editStudentInfo = async(event,studentinfo)=>{
+  event.preventDefault();
+  try{
+    const respone = await fetch('/editstudent',{
+      method:"POST",
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({studentinfo})
+    })
+    const data = await respone.json()
+    return data.message
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
