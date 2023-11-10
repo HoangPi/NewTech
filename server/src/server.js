@@ -4,9 +4,10 @@ const databseURI = require('./databse/databaseURI.js')
 const mongoose = require("mongoose")
 const session = require('express-session')
 
-const getStudent = require('./routes/getStudent.js')
-const editstudent = require('./routes/editStudent.js')
-const getstudentsession = require('./routes/getStudentSession.js')
+const getStudent = require('./routes/studentRoutes/getStudent.js')
+const editstudent = require('./routes/studentRoutes/editStudent.js')
+const getstudentsession = require('./routes/studentRoutes/getStudentSession.js')
+const setinstructorsession = require('./routes/instructorRoutes/setinstructorsession.js')
 
 const app = express()
 const port = 5000
@@ -25,6 +26,7 @@ app.use((req,res,next)=> {
 app.use("/setstudentsession",getStudent)
 app.use("/editstudent",editstudent)
 app.use("/getstudentsession", getstudentsession)
+app.use('/setinstructorsession',setinstructorsession)
 // app.post("/new",(req,res)=>{
 //     console.log('recieved')
 //     res.json({stat: 200})
