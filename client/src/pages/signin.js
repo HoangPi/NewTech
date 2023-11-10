@@ -5,27 +5,46 @@ import * as api from '../api/apiColections.js'
 import { useNavigate } from "react-router-dom"
 
 export const SignIn = () => {
-    const [signInOption,setSignInOption]=useState(true)
+    var signInOption=true
     const navigate = useNavigate()
-    const changeToStudent =()=>{
-        setSignInOption(true)
+    const changeToStudent = ()=>{
+        signInOption=true
+        console.log(signInOption)
     }
-    const changeToInstructor =()=>{
-        setSignInOption(false)
+    const changeToInstructor = ()=>{
+        signInOption=false
+        console.log(signInOption)
+        
     }
-
+    const handelRoleOnChange = (ev) =>{
+        // setSignInOption(ev.target.value==='on')
+        // console.log(signInOption)
+        console.log(ev.target.value)
+    }
 
 
     function handleCallbackResponse(response) {
         var userObject = jwtDecode(response.credential)
-        console.log(userObject)
-        const str1= userObject.email.split('@')
-        const str2=str1[1].split('.')
-        if(str2[0]==='student'){
-            api.setStudentSession(str1[0])
+        // console.log(userObject)
+        if(signInOption===true){
+            //for student
+            console.log("student")
+            const str1= userObject.email.split('@')
+            const str2=str1[1].split('.')
+            if(str2[0]==='student'){
+                api.setStudentSession(str1[0])
+                    .then((data)=>{
+                        console.log(data)
+                        if(data.studentinfo!==null && typeof(data.studentinfo)!=='undefined') navigate("/studenthomepage")
+                        // data.state && navigate("/studenthomepage")
+                    })
+            }}
+        else{
+            //for instructor
+            console.log("instructor")
+            api.setInstructorSession(userObject.email)
                 .then((data)=>{
                     console.log(data)
-                    data.state && navigate("/studenthomepage")
                 })
         }
     }
@@ -48,15 +67,15 @@ export const SignIn = () => {
                 {/* <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57" /> */}
                 <h1 class="h3 mb-3 fw-normal">Please sign in using your Google account</h1>
                 <div style={{ paddingLeft: "25%",paddingRight:"25%" }} id="signInDiv"></div>
-                <div class="form-check">
-                    <input onClick={changeToStudent} class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={signInOption}/>
+                <div onClick={changeToStudent} class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={signInOption}/>
                     <label class="form-check-label" for="flexRadioDefault1">
                         Sign in as student
                     </label>
                 </div>
-                <div class="form-check">
+                <div onClick={changeToInstructor} class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  />
-                    <label onClick={changeToInstructor} class="form-check-label" for="flexRadioDefault2">
+                    <label class="form-check-label" for="flexRadioDefault2">
                         Sign in as instructor
                     </label>
                 </div>

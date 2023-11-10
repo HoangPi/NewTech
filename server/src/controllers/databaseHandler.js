@@ -1,9 +1,10 @@
 const Student = require("../models/student");
 const Class = require('../models/class.js')
-const app = require('../server.js')
+const app = require('../server.js');
+const Instructor = require("../models/instructor.js");
 
 function setStudentSession(req,res){
-    Student.findOne({id:'20110432'})
+    Student.findOne({id:req.body.id})
         .then((studentinfo)=>{
             Class.findOne({id:studentinfo.classid})
                 .then((classinfo)=>{
@@ -34,7 +35,18 @@ async function editStudent(req,res){
     req.session.studentinfo=doc._doc
     res.json({studentinfo:doc._doc})
 }
+async function setInstructorSession(req,res){
+    Instructor.findOne({email:req.body.email})
+        .then((instructorinfo)=>{
+            req.session.instructorinfo=instructorinfo
+            res.json({instructorinfo,state:true})
+        })
+        .catch(()=>{
+            res.json({state:false})
+        })
+}
 module.exports = {
     setStudentSession,
     editStudent,
+    setInstructorSession,
 }
