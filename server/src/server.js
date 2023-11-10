@@ -1,31 +1,34 @@
 const express = require('express')
 const bodyParser = require('body-parser');
-const User = require("./models/user.js")
-const addPost = require("./routes/addPost.js")
-const getAllPosts = require("./routes/getAllPosts.js")
-const delete1 = require('./routes/deletepost.js')
-const addComment = require('./routes/addComment.js')
+const databseURI = require('./databse/databaseURI.js')
+const mongoose = require("mongoose")
+const session = require('express-session')
+
+const getStudent = require('./routes/getStudent.js')
+const editstudent = require('./routes/editStudent.js')
 
 const app = express()
 const port = 5000
 
+app.use(session({
+    secret: 'my-secret', // a secret string used to sign the session ID cookie
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false // don't create session until something stored
+}))
 app.use(bodyParser.json());
-app.get("/api",(req,res) => {
-    console.log("req.body")
-    res.json({User})
-})
 app.use((req,res,next)=> {
     console.log(`${req.method} ${req.url}`);
     next();
 });
 
-app.use("/new",addPost)
-app.use("/getall",getAllPosts)
-app.use("/delete",delete1)
-app.use("/addcomment",addComment)
+app.use("/getstudent",getStudent)
+app.use("/editstudent",editstudent)
 // app.post("/new",(req,res)=>{
 //     console.log('recieved')
 //     res.json({stat: 200})
 //     addNew()
 // })
-app.listen(port,() => {console.log("Server is running on port 5000")})
+mongoose.connect(databseURI)
+    .then(()=>{
+        app.listen(port,() => {console.log("Server is running on port 5000")})
+    })
