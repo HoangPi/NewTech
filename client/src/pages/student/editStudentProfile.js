@@ -21,28 +21,12 @@ export const EditStudentProfile = () => {
         }))
     }
     useEffect(() => {
-        try {
-            console.log('You')
-            fetch('/getstudent', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: '20110432' }),
+        api.getStudentSession()
+            .then(data=>{
+                console.log(data)
+                setStudent(data.studentinfo)
+                setIsLoading(false)
             })
-                .then((respone) => {
-                    console.log(respone)
-                    respone.json()
-                        .then((data) => {
-                            console.log(data.studentinfo)
-                            setIsLoading(false)
-                            setStudent(data.studentinfo)
-                        })
-                })
-        }
-        catch (err) {
-            console.log(err)
-        }
     }, [])
     if (isLoading) return <h1>Loading<img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Youtube_loading_symbol_1_(wobbly).gif" /></h1>
     return (

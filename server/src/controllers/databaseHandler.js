@@ -2,20 +2,20 @@ const Student = require("../models/student");
 const Class = require('../models/class.js')
 const app = require('../server.js')
 
-function getStudentByID(req,res){
-    Student.findOne({id:req.body.id})
+function setStudentSession(req,res){
+    Student.findOne({id:'20110432'})
         .then((studentinfo)=>{
             Class.findOne({id:studentinfo.classid})
                 .then((classinfo)=>{
                     req.session.studentinfo=studentinfo
-                    res.json({studentinfo,classinfo})
+                    res.json({studentinfo,classinfo,state:true})
                 })
                 .catch(()=>{
-                    res.json({err:"Something went wrong, Please try again"})
+                    res.json({state:false})
                 })
         })
         .catch(()=>{
-            res.json({err:"Something went wrong, Please try again"})
+            res.json({state:false})
         })
 }
 async function editStudent(req,res){
@@ -35,6 +35,6 @@ async function editStudent(req,res){
     res.json({studentinfo:doc._doc})
 }
 module.exports = {
-    getStudentByID,
+    setStudentSession,
     editStudent,
 }

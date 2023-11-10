@@ -6,21 +6,30 @@ export const StudentNavBar = () => {
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a href="/viewmythesis">
-                    <button class="btn btn-outline-success" type="submit"  style={{marginRight:'25px'}}>View Thesis</button>
-                </a>
-                <a href="/editstudentprofile">
-                    <button class="btn btn-outline-success" type="submit">Edit Profile</button>
-                </a>
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul style={{ marginLeft: '90%', marginRight: 0 }} class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/signup">
-                                <button type="button" class="btn btn-success" href='/signup'>Log out</button>
+                            <a href="/viewmythesis">
+                                <button class="btn btn-outline-success" type="submit" style={{ marginRight: '25px' }}>Thesis</button>
                             </a>
                         </div>
                     </ul>
-
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a href="/editstudentprofile">
+                                <button class="btn btn-outline-success" type="submit">Profile</button>
+                            </a>
+                        </div>
+                    </ul>
+                    <ul style={{ marginLeft: '90%', marginRight: 0 }} class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a href="/signup">
+                                <button type="button" class="btn btn-success" href='/signup'>Sign out</button>
+                            </a>
+                        </div>
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -79,3 +79,54 @@ export const editStudentInfo = async(event,studentinfo)=>{
     return "Something went wrong"
   }
 }
+export const get1StudentByID = async(event, id)=>{
+  event.preventDefault();
+  try{
+    const respone = await fetch('/getstudent',{
+      method:"POST",
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({id})
+    })
+    const data = await respone.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const setStudentSession = async(id)=>{
+  // event.preventDefault();
+  try{
+    const respone = await fetch('/setstudentsession',{
+      method:"POST",
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({id})
+    })
+    const data = await respone.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getStudentSession = async()=>{
+  // event.preventDefault();
+  try{
+    const respone = await fetch('/getstudentsession',{
+      method:"POST",
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify()
+    })
+    const data = await respone.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
