@@ -6,6 +6,7 @@ const session = require('express-session')
 
 const getStudent = require('./routes/getStudent.js')
 const editstudent = require('./routes/editStudent.js')
+const getstudentsession = require('./routes/getStudentSession.js')
 
 const app = express()
 const port = 5000
@@ -21,8 +22,9 @@ app.use((req,res,next)=> {
     next();
 });
 
-app.use("/getstudent",getStudent)
+app.use("/setstudentsession",getStudent)
 app.use("/editstudent",editstudent)
+app.use("/getstudentsession", getstudentsession)
 // app.post("/new",(req,res)=>{
 //     console.log('recieved')
 //     res.json({stat: 200})
