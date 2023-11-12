@@ -1,9 +1,11 @@
 import { StudentNavBar } from "../../components/studentNavBar"
 import { useEffect, useState } from "react"
 import * as api from '../../api/apiColections.js'
+import { useNavigate } from 'react-router-dom'
 // import { EditStudentProfile } from "./editStudentProfile.js"
 
 export const StudentPage = (props) => {
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const [student,SetStudent] = useState()
     useEffect(() => {
@@ -30,6 +32,10 @@ export const StudentPage = (props) => {
         // }
         api.getStudentSession()
             .then((response)=>{
+                if(response.status===false){
+                    navigate('/')
+                    return
+                }
                 console.log(response)
                 setIsLoading(false)
                 // response.json()

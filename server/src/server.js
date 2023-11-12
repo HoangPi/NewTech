@@ -8,6 +8,8 @@ const getStudent = require('./routes/studentRoutes/getStudent.js')
 const editstudent = require('./routes/studentRoutes/editStudent.js')
 const getstudentsession = require('./routes/studentRoutes/getStudentSession.js')
 const setinstructorsession = require('./routes/instructorRoutes/setinstructorsession.js')
+const signout = require('./routes/signout.js')
+const getinstructorsession = require('./routes/instructorRoutes/getinstructorsession.js')
 
 const app = express()
 const port = 5000
@@ -27,11 +29,9 @@ app.use("/setstudentsession",getStudent)
 app.use("/editstudent",editstudent)
 app.use("/getstudentsession", getstudentsession)
 app.use('/setinstructorsession',setinstructorsession)
-// app.post("/new",(req,res)=>{
-//     console.log('recieved')
-//     res.json({stat: 200})
-//     addNew()
-// })
+app.use('/signout',signout)
+app.use('/getinstructorsession',getinstructorsession)
+
 mongoose.connect(databseURI)
     .then(()=>{
         app.listen(port,() => {console.log("Server is running on port 5000")})
