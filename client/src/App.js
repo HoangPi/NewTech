@@ -5,6 +5,8 @@ import { LandingPage } from "./pages/landingPage.js"
 import { StudentPage } from "./pages/student/studentPage.js"
 import { EditStudentProfile } from "./pages/student/editStudentProfile.js"
 import { SignIn } from './pages/signin.js'
+import { InstructorPage } from './pages/instructor/instructorPage.js'
+import { InstructorProfile } from './pages/instructor/instructorProfile.js'
 
 function App() {
 
@@ -36,6 +38,8 @@ function App() {
           <Route path='/studenthomepage' element={<StudentPage setStudent={setStudent}/>}/>
           <Route path='/editstudentprofile' element={<EditStudentProfile />} />
           <Route path='/signin' element={<SignIn></SignIn>}></Route>
+          <Route path='/instructorhomepage' element={<InstructorPage/>}></Route>
+          <Route path='/instructorprofile' element={<InstructorProfile></InstructorProfile>}></Route>
         </Routes>
       </Router>
     </div>

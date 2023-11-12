@@ -1,7 +1,7 @@
 import { signOut } from "../api/apiColections"
 import { useNavigate } from "react-router-dom"
 
-export const StudentNavBar = () => {
+export const InstructorNavBar = () => {
     const navigate = useNavigate()
     const handleSignOut =()=>{
         signOut()
@@ -30,7 +30,7 @@ export const StudentNavBar = () => {
                     </ul>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/editstudentprofile">
+                            <a href="/instructorprofile">
                                 <button class="btn btn-outline-success" type="submit">Profile</button>
                             </a>
                         </div>

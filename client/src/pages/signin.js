@@ -16,11 +16,6 @@ export const SignIn = () => {
         console.log(signInOption)
         
     }
-    const handelRoleOnChange = (ev) =>{
-        // setSignInOption(ev.target.value==='on')
-        // console.log(signInOption)
-        console.log(ev.target.value)
-    }
 
 
     function handleCallbackResponse(response) {
@@ -36,6 +31,7 @@ export const SignIn = () => {
                     .then((data)=>{
                         console.log(data)
                         if(data.studentinfo!==null && typeof(data.studentinfo)!=='undefined') navigate("/studenthomepage")
+                        else alert("User does not exist in the system")
                         // data.state && navigate("/studenthomepage")
                     })
             }}
@@ -44,7 +40,7 @@ export const SignIn = () => {
             console.log("instructor")
             api.setInstructorSession(userObject.email)
                 .then((data)=>{
-                    console.log(data)
+                    data.status ? navigate('/instructorhomepage') : alert("User does not exist in the system")
                 })
         }
     }

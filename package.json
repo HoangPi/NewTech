@@ -3,7 +3,7 @@
     "concurrently": "^8.2.2"
   },
   "scripts": {
-    "init":"concurrently \"cd server && npm install nodeserver\" \"cd client && npm install react-scripts --save\" ",
+    "init":"concurrently \"cd server && npm install\" \"cd client && npm install\" ",
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" "
   }
 }

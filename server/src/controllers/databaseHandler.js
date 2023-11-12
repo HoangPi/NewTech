@@ -38,11 +38,15 @@ async function editStudent(req,res){
 async function setInstructorSession(req,res){
     Instructor.findOne({email:req.body.email})
         .then((instructorinfo)=>{
+            if(instructorinfo===null || typeof(instructorinfo)==='undefined'){
+                res.json({status:false})
+                return
+            }
             req.session.instructorinfo=instructorinfo
-            res.json({instructorinfo,state:true})
+            res.json({instructorinfo,status:true})
         })
         .catch(()=>{
-            res.json({state:false})
+            res.json({status:false})
         })
 }
 module.exports = {

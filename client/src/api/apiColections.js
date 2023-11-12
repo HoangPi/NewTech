@@ -146,3 +146,33 @@ export const setInstructorSession = async(email)=>{
     return "Something went wrong"
   }
 }
+export const getInstructorSession = async()=>{
+  try{
+    const respone = await fetch('/getinstructorsession',{
+      method:"POST",
+      headers:{
+        'Content-Type': 'application/json',
+      },
+    })
+    const data = await respone.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const signOut = async()=>{
+  try{
+    const response = await fetch('/signout',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+    })
+    const data = await response.json()
+    return data.status
+  }
+  catch(error){
+    return false
+  }
+}

@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { useEffect } from "react"
+import { useNavigate } from 'react-router-dom'
 import * as api from '../../api/apiColections.js'
 
 export const EditStudentProfile = () => {
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const [student, setStudent]=useState()
     const handleEditButton=(ev)=>{
@@ -23,6 +25,10 @@ export const EditStudentProfile = () => {
     useEffect(() => {
         api.getStudentSession()
             .then(data=>{
+                if(data.status===false){
+                    navigate('/')
+                    return
+                }
                 console.log(data)
                 setStudent(data.studentinfo)
                 setIsLoading(false)
