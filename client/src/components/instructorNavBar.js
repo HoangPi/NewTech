@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom"
 
 export const InstructorNavBar = () => {
     const navigate = useNavigate()
-    const handleSignOut =()=>{
+    const handleSignOut = () => {
         signOut()
-            .then((result)=>{
+            .then((result) => {
                 result ? navigate('/') : alert("Internal error, please try again")
-                
+
             })
-    } 
+    }
 
     return (
         <nav style={{ alignContent: 'center' }} class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,10 +20,16 @@ export const InstructorNavBar = () => {
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/viewmythesis">
+                            <a href="/addthesis">
+                                <button class="btn btn-outline-success" type="submit" style={{ marginRight: '25px' }}>Add Thesis</button>
+                            </a>
+                        </div>
+                    </ul>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a href="/instructortheses">
                                 <button class="btn btn-outline-success" type="submit" style={{ marginRight: '25px' }}>Thesis</button>
                             </a>
                         </div>

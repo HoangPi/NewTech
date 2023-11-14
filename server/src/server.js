@@ -10,6 +10,10 @@ const getstudentsession = require('./routes/studentRoutes/getStudentSession.js')
 const setinstructorsession = require('./routes/instructorRoutes/setinstructorsession.js')
 const signout = require('./routes/signout.js')
 const getinstructorsession = require('./routes/instructorRoutes/getinstructorsession.js')
+const getcategories = require('./routes/instructorRoutes/getcategories.js')
+const get1Student = require('./routes/studentRoutes/get1student.js')
+const addthesis = require('./routes/instructorRoutes/addthesis.js')
+const getinstructorthesis = require('./routes/instructorRoutes/getinstructorthesis.js')
 
 const app = express()
 const port = 5000
@@ -31,6 +35,10 @@ app.use("/getstudentsession", getstudentsession)
 app.use('/setinstructorsession',setinstructorsession)
 app.use('/signout',signout)
 app.use('/getinstructorsession',getinstructorsession)
+app.use('/getcategories',getcategories)
+app.use('/getstudent',get1Student)
+app.use('/addthesis',addthesis)
+app.use('/getthesisbyinstructorid',getinstructorthesis)
 
 mongoose.connect(databseURI)
     .then(()=>{
