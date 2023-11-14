@@ -64,7 +64,7 @@ export const SignIn = () => {
                 <h1 class="h3 mb-3 fw-normal">Please sign in using your Google account</h1>
                 <div style={{ paddingLeft: "25%",paddingRight:"25%" }} id="signInDiv"></div>
                 <div onClick={changeToStudent} class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={signInOption}/>
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked/>
                     <label class="form-check-label" for="flexRadioDefault1">
                         Sign in as student
                     </label>

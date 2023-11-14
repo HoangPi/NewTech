@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 export const StudentPage = (props) => {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
-    const [student,SetStudent] = useState()
+    // const [student,SetStudent] = useState()
     useEffect(() => {
         // try {
         //     fetch('/getstudent', {

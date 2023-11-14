@@ -176,3 +176,50 @@ export const signOut = async()=>{
     return false
   }
 }
+export const getCategories = async()=>{
+  try{
+    const response = await fetch('/getcategories',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const addThesis = async(studentlist, name, category, description)=>{
+  try{
+    const response = await fetch('/addthesis',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({studentlist,name,category,description})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getThesisByInstructorID = async(instructorid)=>{
+  try{
+    const response = await fetch('/getthesisbyinstructorid',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({instructorid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}

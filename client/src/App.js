@@ -7,6 +7,8 @@ import { EditStudentProfile } from "./pages/student/editStudentProfile.js"
 import { SignIn } from './pages/signin.js'
 import { InstructorPage } from './pages/instructor/instructorPage.js'
 import { InstructorProfile } from './pages/instructor/instructorProfile.js'
+import { ManageThesis } from './pages/instructor/mangeThesis.js'
+import { AddThesis } from './pages/instructor/addThesis.js'
 
 function App() {
 
@@ -40,6 +42,8 @@ function App() {
           <Route path='/signin' element={<SignIn></SignIn>}></Route>
           <Route path='/instructorhomepage' element={<InstructorPage/>}></Route>
           <Route path='/instructorprofile' element={<InstructorProfile></InstructorProfile>}></Route>
+          <Route path='/instructortheses' element={<ManageThesis></ManageThesis>}></Route>
+          <Route path='/addthesis' element={<AddThesis></AddThesis>}></Route>
         </Routes>
       </Router>
     </div>
