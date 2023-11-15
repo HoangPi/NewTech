@@ -207,6 +207,7 @@ export const addThesis = async(studentlist, name, category, description)=>{
     return "Something went wrong"
   }
 }
+//this get all theses associated with instructor and store it in server session
 export const getThesisByInstructorID = async(instructorid)=>{
   try{
     const response = await fetch('/getthesisbyinstructorid',{
@@ -215,6 +216,70 @@ export const getThesisByInstructorID = async(instructorid)=>{
         'Content-Type':'application/json',
       },
       body: JSON.stringify({instructorid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const setThesisSession = async(id)=>{
+  try{
+    const response = await fetch('/setthesissession',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({id})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getThesisSession = async()=>{
+  try{
+    const response = await fetch('/getthesissession',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getStudentsInThesis = async(thesisID)=>{
+  try{
+    const response = await fetch('/getstudentsinthesis',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisID})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getTasksInThesis = async(thesisID)=>{
+  try{
+    const response = await fetch('/gettasksinthesis',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisID})
     })
     const data = await response.json()
     return data
