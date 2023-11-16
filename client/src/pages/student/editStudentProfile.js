@@ -6,26 +6,26 @@ import * as api from '../../api/apiColections.js'
 export const EditStudentProfile = () => {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
-    const [student, setStudent]=useState()
-    const handleEditButton=(ev)=>{
-        api.editStudentInfo(ev,student)
+    const [student, setStudent] = useState()
+    const handleEditButton = (ev) => {
+        api.editStudentInfo(ev, student)
     }
-    const handlePhoneOnChange = (ev)=>{
-        setStudent(prev=>({
+    const handlePhoneOnChange = (ev) => {
+        setStudent(prev => ({
             ...prev,
-            phone:ev.target.value,
+            phone: ev.target.value,
         }))
     }
-    const handleAddressOnChange = (ev) =>{
-        setStudent(prev=>({
+    const handleAddressOnChange = (ev) => {
+        setStudent(prev => ({
             ...prev,
-            address:ev.target.value,
+            address: ev.target.value,
         }))
     }
     useEffect(() => {
         api.getStudentSession()
-            .then(data=>{
-                if(data.status===false){
+            .then(data => {
+                if (data.status === false) {
                     navigate('/')
                     return
                 }
@@ -34,28 +34,31 @@ export const EditStudentProfile = () => {
                 setIsLoading(false)
             })
     }, [])
-    if (isLoading) return <h1>Loading<img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Youtube_loading_symbol_1_(wobbly).gif" /></h1>
+    if (isLoading) return <div class="d-flex align-items-center">
+        <strong role="status">Loading...</strong>
+        <div class="spinner-border ms-auto" aria-hidden="true"></div>
+    </div>
     return (
         <div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Full name     </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.fullname}/>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.fullname} />
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Student ID    </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.id}/>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.id} />
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">class         </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.classid}/>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.classid} />
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Phone number  </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handlePhoneOnChange} value={student.phone}/>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handlePhoneOnChange} value={student.phone} />
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Address       </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handleAddressOnChange} value={student.address}/>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handleAddressOnChange} value={student.address} />
             </div>
             <button type="button" class="btn btn-primary btn-lg" onClick={handleEditButton}>Edit</button>
         </div>

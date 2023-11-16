@@ -4,6 +4,7 @@ const app = require('../server.js');
 const Instructor = require("../models/instructor.js");
 const Category = require('../models/categories.js')
 const Thesis = require('../models/thesis.js')
+const Task = require('../models/task.js')
 
 function setStudentSession(req,res){
     Student.findOne({id:req.body.id})
@@ -77,10 +78,8 @@ async function addThesis(req,res){
         name: req.body.name,
         category: req.body.category,
         instructorid: req.session.instructorinfo._id,
-        jobs:[],
-        progress:[],
-        progressconfirm:[],
         description:req.body.description,
+        progress:0,
         status:'on going',
     })
     
@@ -113,12 +112,40 @@ async function addThesis(req,res){
 async function getInstructorThesis(req,res){
     Thesis.find({instructorid:req.session.instructorinfo._id})
         .then((result)=>{
+            req.session.thesisList = result
             res.json({thesis:result})
+                // .then(()=>{
+                //     res.json({thesis:result})
+                // })
+            
         })
         .catch(err=>{
             console.log(err)
             res.json({})
         })
+}
+async function getStudents(req,res){
+    Student.find({thesisid:req.body.thesisID})
+        .then((docs)=>{
+            res.json({studentList:docs})
+        })
+}
+async function getTasks(req,res){
+    Task.find({thesisid:req.body.thesisID})
+        .then((docs)=>{
+            res.json({tasks:docs})
+        })
+}
+async function addTasks(req,res){
+    for(let task of req.body.tasks){
+        t = new Task({
+            thesisid: req.body.thesisID,
+            job: task,
+            confirm:false,
+        })
+        await t.save()
+    }
+    res.json({status:true})
 }
 module.exports = {
     setStudentSession,
@@ -128,4 +155,7 @@ module.exports = {
     get1Student,
     addThesis,
     getInstructorThesis,
+    getStudents,
+    getTasks,
+    addTasks,
 }

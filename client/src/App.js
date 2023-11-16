@@ -9,6 +9,7 @@ import { InstructorPage } from './pages/instructor/instructorPage.js'
 import { InstructorProfile } from './pages/instructor/instructorProfile.js'
 import { ManageThesis } from './pages/instructor/mangeThesis.js'
 import { AddThesis } from './pages/instructor/addThesis.js'
+import { ThesisDetail } from './pages/instructor/thesisDetail.js'
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path='/instructorprofile' element={<InstructorProfile></InstructorProfile>}></Route>
           <Route path='/instructortheses' element={<ManageThesis></ManageThesis>}></Route>
           <Route path='/addthesis' element={<AddThesis></AddThesis>}></Route>
+          <Route path='/thesisdetail' element={<ThesisDetail></ThesisDetail>}></Route>
         </Routes>
       </Router>
     </div>

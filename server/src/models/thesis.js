@@ -13,18 +13,6 @@ const thesisSchema= mongoose.Schema({
         type: String,
         required: true,
     },
-    jobs:{
-        type:[],
-        required: true,
-    },
-    progress:{
-        type:[],
-        required:true,
-    },
-    progressconfirm:{
-        type:[],
-        required:true,
-    },
     description:{
         type: String,
         required: true,
@@ -33,6 +21,10 @@ const thesisSchema= mongoose.Schema({
         type:String,
         required: true,
     },
+    progress:{
+        type: Number,
+        required:true,
+    }
 },{timestamps: true});
 
 const Thesis = mongoose.model('thesis',thesisSchema,'thesis')
