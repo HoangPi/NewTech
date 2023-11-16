@@ -19,6 +19,9 @@ const getthesis = require('./routes/instructorRoutes/getthesissession.js')
 const getstudentsthesis = require('./routes/instructorRoutes/getstudents.js')
 const gettasksinthesis = require('./routes/instructorRoutes/gettasksinthesis.js')
 const addtasks = require('./routes/instructorRoutes/addtasks.js')
+const studentthesis = require('./routes/studentRoutes/getstudentthesis.js')
+const submit = require('./routes/studentRoutes/submit.js')
+const confirmsubmission = require('./routes/instructorRoutes/confirmsubmission.js')
 
 const app = express()
 const port = 5000
@@ -49,6 +52,9 @@ app.use('/getthesissession',getthesis)
 app.use('/getstudentsinthesis',getstudentsthesis)
 app.use('/gettasksinthesis',gettasksinthesis)
 app.use('/addtasks',addtasks)
+app.use('/studentthesis', studentthesis)
+app.use('/submit',submit)
+app.use('/confirmsubmission',confirmsubmission)
 
 mongoose.connect(databseURI)
     .then(()=>{
