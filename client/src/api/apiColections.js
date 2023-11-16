@@ -288,3 +288,19 @@ export const getTasksInThesis = async(thesisID)=>{
     return "Something went wrong"
   }
 }
+export const addTask = async(thesisID,tasks)=>{
+  try{
+    const response = await fetch('/addtasks',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisID,tasks})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}

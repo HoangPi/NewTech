@@ -1,12 +1,37 @@
 import { useEffect, useState } from "react"
-import { getInstructorSession, getStudentsInThesis, getThesisSession } from "../../api/apiColections"
+import { addTask, getInstructorSession, getStudentsInThesis, getTasksInThesis, getThesisSession } from "../../api/apiColections"
 import { useNavigate } from "react-router-dom"
 
 export const ThesisDetail = () => {
     const navigate = useNavigate()
     const [isLoading, setIsloading] = useState(true)
+    const [taskList, setTaskList] = useState([])
     const [thesis, setThesis] = useState()
+    const [tasks, setTasks] = useState([])
+    const [taskInput, setTaskInput] = useState('')
     const [studentList, setStudentList] = useState([])
+
+    const handleTaskInputOnChange = (ev) => {
+        setTaskInput(ev.target.value)
+    }
+    //this is for updating the useState
+    const handleAddNewTask = (ev) => {
+        setTaskList([...taskList, taskInput])
+    }
+    //this is for updating the database
+    const handleAddTask = (ev) => {
+        addTask(thesis._id, taskList)
+            .then((result) => {
+                result.status === null
+                    ? alert("Fail to add task")
+                    : result.status ? alert("Tasks added") : alert("Fail to add task")
+            })
+    }
+    const handleRemoveTask = (ev) => {
+        const temp = Number(ev.target.id)
+        // console.log(temp)
+        setTaskList([...taskList.slice(0, temp), ...taskList.slice(temp + 1)])
+    }
     useEffect(() => {
         getInstructorSession()
             .then((instructor) => {
@@ -24,13 +49,16 @@ export const ThesisDetail = () => {
                                 .then((s) => {
                                     console.log(s)
                                     setStudentList(s.studentList)
+                                    getTasksInThesis(value.thesis._id)
+                                        .then((tasks) => {
+                                            setTasks(tasks.tasks)
+                                        })
+                                        .finally(() => setIsloading(false))
                                 })
-                                .finally(() => setIsloading(false))
-
-
                         })
                 }
             })
+
     }, [])
 
     if (isLoading) return <div class="d-flex align-items-center">
@@ -79,18 +107,65 @@ export const ThesisDetail = () => {
             </div>
             <div class="border border-success p-2 mb-2 border-opacity-75">
                 <h3>Task details: </h3>
-                <div class="input-group">
-                    <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
-                    <span class="input-group-text">
-                        <span class="material-symbols-outlined">
-                            check
-                        </span>
-                    </span>
-                    <a href="whathappens" target="_blank">
-                        <span class="input-group-text">Access</span>
-                    </a>
+                <div class="input-group mb-3">
+                    <input onChange={handleTaskInputOnChange} type="text" class="form-control" placeholder="New task" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                    <button onClick={handleAddNewTask} class="btn btn-outline-secondary" type="button" id="button-addon2">Add new task</button>
                 </div>
-                
+                {taskList.map((value, key) =>
+                    <div class="input-group mb-3">
+                        <input disabled={true} value={value} type="text" class="form-control" placeholder="Task" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                        <button onClick={handleRemoveTask} id={key} class="btn btn-outline-secondary" type="button" >Remove</button>
+                    </div>
+                )}
+                <button onClick={handleAddTask} type="button" class="btn btn-primary">Add tasks</button>
+                <h3>Untouched tasks: </h3>
+                {tasks.map((value, key) =>
+                    (value.submission===null) &&
+                    <div class="input-group">
+                        <input value={value.job} type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
+                        <span class="input-group-text">
+                            <a href="whathappens" target="_blank">Access</a>
+                        </span>
+
+                        <span class="input-group-text">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Confirm
+                                </label>
+                            </div>
+                        </span>
+                        <span class="input-group-text">
+                            <span class="material-symbols-outlined">
+                                check
+                            </span>
+                        </span>
+                    </div>
+                )}
+                <h3>Pending tasks: </h3>
+                {tasks.map((value, key) =>
+                    (value.submission!==null && value.confirm===false) &&
+                    <div class="input-group">
+                        <input value={value.job} type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
+                        <span class="input-group-text">
+                            <a href="whathappens" target="_blank">Access</a>
+                        </span>
+
+                        <span class="input-group-text">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Confirm
+                                </label>
+                            </div>
+                        </span>
+                        <span class="input-group-text">
+                            <span class="material-symbols-outlined">
+                                check
+                            </span>
+                        </span>
+                    </div>
+                )}
             </div>
         </div>
     )

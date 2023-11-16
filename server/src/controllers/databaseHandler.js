@@ -136,6 +136,17 @@ async function getTasks(req,res){
             res.json({tasks:docs})
         })
 }
+async function addTasks(req,res){
+    for(let task of req.body.tasks){
+        t = new Task({
+            thesisid: req.body.thesisID,
+            job: task,
+            confirm:false,
+        })
+        await t.save()
+    }
+    res.json({status:true})
+}
 module.exports = {
     setStudentSession,
     editStudent,
@@ -146,4 +157,5 @@ module.exports = {
     getInstructorThesis,
     getStudents,
     getTasks,
+    addTasks,
 }

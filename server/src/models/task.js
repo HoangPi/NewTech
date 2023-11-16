@@ -11,7 +11,7 @@ const taskSchema= mongoose.Schema({
     },
     submission:{
         type: String,
-        required: true,
+        default:null,
     },
     confirm:{
         type: Boolean,
