@@ -57,7 +57,8 @@ export const ManageThesis = () => {
     return (
         <div style={{ paddingLeft: '25%', paddingRight: '25%', paddingTop: '25px' }}>
             {thesisList.map((value, key) => {
-                var percentage= value.progress
+                var percentage= value.progress + '%'
+                console.log(percentage)
                 return (
                     <>
                         <div class="card" style={{ width: '100%', marginBottom: '25px' }}>
@@ -69,7 +70,7 @@ export const ManageThesis = () => {
                             </div>
                             <h5>Progress</h5>
                             <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar" style={{width: {percentage}}}>{percentage}</div>
+                                <div class="progress-bar" style={{width: percentage}}>{percentage}</div>
                             </div>
                         </div>
                         

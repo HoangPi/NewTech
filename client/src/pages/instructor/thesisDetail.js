@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { addTask, getInstructorSession, getStudentsInThesis, getTasksInThesis, getThesisSession } from "../../api/apiColections"
+import { addTask, confirmSubmission, getInstructorSession, getStudentsInThesis, getTasksInThesis, getThesisSession } from "../../api/apiColections"
 import { useNavigate } from "react-router-dom"
 
 export const ThesisDetail = () => {
@@ -11,8 +11,22 @@ export const ThesisDetail = () => {
     const [taskInput, setTaskInput] = useState('')
     const [studentList, setStudentList] = useState([])
 
+    const handleReturn=()=>{
+        navigate('/')
+    }
+    const handleRefresh=()=>{
+        window.location.reload()
+    }
     const handleTaskInputOnChange = (ev) => {
         setTaskInput(ev.target.value)
+    }
+    const handleConfirm = (ev) => {
+        confirmSubmission(tasks[Number(ev.target.id)])
+            .then((result) => {
+                result.status
+                    ? alert("Task confirmed")
+                    : alert("Something went wrong")
+            })
     }
     //this is for updating the useState
     const handleAddNewTask = (ev) => {
@@ -51,6 +65,7 @@ export const ThesisDetail = () => {
                                     setStudentList(s.studentList)
                                     getTasksInThesis(value.thesis._id)
                                         .then((tasks) => {
+                                            console.log(tasks.tasks)
                                             setTasks(tasks.tasks)
                                         })
                                         .finally(() => setIsloading(false))
@@ -118,55 +133,32 @@ export const ThesisDetail = () => {
                     </div>
                 )}
                 <button onClick={handleAddTask} type="button" class="btn btn-primary">Add tasks</button>
-                <h3>Untouched tasks: </h3>
-                {tasks.map((value, key) =>
-                    (value.submission===null) &&
-                    <div class="input-group">
-                        <input value={value.job} type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
-                        <span class="input-group-text">
-                            <a href="whathappens" target="_blank">Access</a>
-                        </span>
-
-                        <span class="input-group-text">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Confirm
-                                </label>
-                            </div>
-                        </span>
-                        <span class="input-group-text">
-                            <span class="material-symbols-outlined">
-                                check
-                            </span>
-                        </span>
-                    </div>
-                )}
                 <h3>Pending tasks: </h3>
                 {tasks.map((value, key) =>
-                    (value.submission!==null && value.confirm===false) &&
+                    (value.confirm === false) &&
                     <div class="input-group">
-                        <input value={value.job} type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
-                        <span class="input-group-text">
-                            <a href="whathappens" target="_blank">Access</a>
-                        </span>
-
-                        <span class="input-group-text">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Confirm
-                                </label>
-                            </div>
-                        </span>
-                        <span class="input-group-text">
-                            <span class="material-symbols-outlined">
-                                check
-                            </span>
-                        </span>
+                        <input disabled={true} type="text" class="form-control" placeholder={value.job} aria-label="Recipient's username with two button addons" />
+                        <a href={value.submission} target="_blank">
+                            <button class="btn btn-outline-secondary" type="button">Access</button>
+                        </a>
+                        <button id={key} onClick={handleConfirm} class="btn btn-outline-secondary" type="button">Confirm</button>
+                    </div>
+                )}
+                <h3>Finished tasks: </h3>
+                {tasks.map(value =>
+                    value.confirm === true &&
+                    <div>
+                        <div class="input-group">
+                            <input disabled={true} type="text" class="form-control" placeholder={value.job} aria-label="Recipient's username with two button addons" />
+                            <a href={value.submission} target="_blank">
+                                <button class="btn btn-outline-secondary" type="button">Access</button>
+                            </a>
+                        </div>
                     </div>
                 )}
             </div>
+            <button onClick={handleReturn} style={{marginRight:'30px'}} type="button" class="btn btn-primary">Return</button>
+            <button onClick={handleRefresh} type="button" class="btn btn-primary">Refresh</button>
         </div>
     )
 }

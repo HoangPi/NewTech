@@ -304,3 +304,52 @@ export const addTask = async(thesisID,tasks)=>{
     return "Something went wrong"
   }
 }
+//get the thesis associated with student ID and set it into the server session
+export const getStudentThesis = async(id)=>{
+  try{
+    const response = await fetch('/studentthesis',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({id})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const submit = async(taskid, submission)=>{
+  try{
+    const response = await fetch('/submit',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({taskid, submission})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const confirmSubmission = async(taskid)=>{
+  try{
+    const response = await fetch('/confirmsubmission',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({taskid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
