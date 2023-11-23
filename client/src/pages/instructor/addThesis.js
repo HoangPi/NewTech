@@ -30,6 +30,7 @@ export const AddThesis = () => {
         }
         else if(Object.keys(studentList).length>4){
             alert("Thesis must have at most 4 participants")
+            return
         }
         addThesis(studentList,thesisName,temp,description)
             .then(result=>{

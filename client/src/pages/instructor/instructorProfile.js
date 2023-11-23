@@ -33,8 +33,25 @@ export const InstructorProfile =() =>{
         }))
     }
     const handleEditProfile =()=>{
+        if(instructor.address==='' || instructor.phone===''){
+            alert('Please fill all the fields')
+            return
+        }
+        else if(instructor.phone.length <6 || instructor.phone.length>13){
+            alert("Phone number's length must be in between 6 and 13")
+            return
+        }
+        else{
+            for(let i = 0;i<instructor.phone.length;i++){
+                if(instructor.phone.charCodeAt(i) < 48 || instructor.phone.charCodeAt(i) > 57){
+                    alert('Phone number must be nummeric')
+                    return
+                }
+            }
+        }
         editInstructorProfile(instructor.phone,instructor.address)
             .then(respone=>{
+                alert('Profile updated')
                 setInstructor(respone.instructorinfo)
                 console.log(respone)
             })
