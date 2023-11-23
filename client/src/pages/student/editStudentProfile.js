@@ -12,7 +12,29 @@ export const EditStudentProfile = () => {
         navigate('/')
     }
     const handleEditButton = (ev) => {
+        if(student.phone===''||student.address===''){
+            alert("Please fill all the fields")
+            return
+        }
+        else if(student.phone.length<6||student.phone.length>13){
+            alert("Phone number's length must be in between 6 and 13")
+            return
+        }
+        else{
+            for(let i = 0; i<student.phone.length;i++){
+                if(student.phone.charCodeAt(i) < 48 || student.phone.charCodeAt(i) > 57){
+                    alert('Phone number must be nummeric')
+                    return
+                }
+            }
+        }
         api.editStudentInfo(ev, student)
+            .then(response=>{
+                alert('Profile updated')
+                // console.log(response)
+                // setStudent(response.studentinfo)
+
+            })
     }
     const handlePhoneOnChange = (ev) => {
         setStudent(prev => ({
