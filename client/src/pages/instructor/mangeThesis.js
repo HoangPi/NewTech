@@ -8,6 +8,9 @@ export const ManageThesis = () => {
     const [progressBars,setProgressBars]=useState([])
     const navigate = useNavigate()
 
+    const handleReturn =()=>{
+        navigate('/')
+    }
     const handleThesisSessionOnChange=(ev)=>{
         setThesisSession(ev.target.id)
             .then((value)=>{
@@ -65,6 +68,11 @@ export const ManageThesis = () => {
                             <div class="card-body">
                                 <h5 class="card-title">{value.name}</h5>
                                 <h6 class="card-subtitle mb-2 text-body-secondary">{value.category}</h6>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">Status: <span style={{color: value.status==='on going' 
+                                                                                                            ? '#0EA5E9' 
+                                                                                                            : value.status==='Suspended'
+                                                                                                                ?'#DC3545'
+                                                                                                                :'#38A169'}}>{value.status}</span></h6>
                                 <p class="card-text">{value.description}.</p>
                                 <a id={key} onClick={handleThesisSessionOnChange} class="card-link">Detail</a>
                             </div>
@@ -77,7 +85,7 @@ export const ManageThesis = () => {
                     </>
                 )
             })}
-
+            <button onClick={handleReturn} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Return</button>
         </div>
     )
 }

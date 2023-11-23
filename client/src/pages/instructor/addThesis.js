@@ -28,6 +28,9 @@ export const AddThesis = () => {
             alert("Thesis must have at least 1 participant")
             return
         }
+        else if(Object.keys(studentList).length>4){
+            alert("Thesis must have at most 4 participants")
+        }
         addThesis(studentList,thesisName,temp,description)
             .then(result=>{
                 console.log(result.status)
@@ -99,7 +102,7 @@ export const AddThesis = () => {
 
     }, [])
     return (
-        <div style={{ paddingLeft: '15%', paddingRight: '15%', paddingTop: '50px' }}>
+        <div style={{ paddingInline:'20%', paddingTop: '50px' }}>
             <div class="input-group mb-3">
                 <input onChange={handelStudentIDChange} type="text" class="form-control" placeholder="Student ID" aria-label="Recipient's username" aria-describedby="button-addon2" />
                 <button onClick={findStudent} class="btn btn-outline-secondary" type="button" id="button-addon2">Find</button>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getInstructorSession } from "../../api/apiColections"
+import { editInstructorProfile, getInstructorSession } from "../../api/apiColections"
 import { useNavigate } from "react-router-dom"
 
 export const InstructorProfile =() =>{
@@ -17,6 +17,9 @@ export const InstructorProfile =() =>{
                 setIsLoading(false)
             })
     },[])
+    const handleReturn=()=>{
+        navigate('/')
+    }
     const handlePhoneOnChange=(ev)=>{
         setInstructor(prev=>({
             ...prev,
@@ -29,12 +32,16 @@ export const InstructorProfile =() =>{
             address:ev.target.value,
         }))
     }
-    const editInstructorProfile =()=>{
-
+    const handleEditProfile =()=>{
+        editInstructorProfile(instructor.phone,instructor.address)
+            .then(respone=>{
+                setInstructor(respone.instructorinfo)
+                console.log(respone)
+            })
     }
     if(isLoading) return <h1>Loading</h1>
     return(
-        <div>
+        <div style={{paddingInline:'20%', paddingTop:'50px'}}>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Full name     </span>
                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={instructor.fullname}/>
@@ -51,7 +58,8 @@ export const InstructorProfile =() =>{
                 <span class="input-group-text" id="inputGroup-sizing-default">Address       </span>
                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handleAddressOnChange} value={instructor.address}/>
             </div>
-            <button type="button" class="btn btn-primary btn-lg" onClick={editInstructorProfile}>Edit</button>
+            <button type="button" class="btn btn-primary btn-lg" onClick={handleEditProfile}>Edit</button>
+            <button style={{marginLeft:'20px'}} type="button" class="btn btn-primary btn-lg" onClick={handleReturn}>Return</button>
         </div>
     )
 }

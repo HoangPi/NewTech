@@ -22,6 +22,10 @@ const addtasks = require('./routes/instructorRoutes/addtasks.js')
 const studentthesis = require('./routes/studentRoutes/getstudentthesis.js')
 const submit = require('./routes/studentRoutes/submit.js')
 const confirmsubmission = require('./routes/instructorRoutes/confirmsubmission.js')
+const addscore = require('./routes/instructorRoutes/addscore.js')
+const getscore = require('./routes/instructorRoutes/getscore.js')
+const instructorinfo = require('./routes/instructorRoutes/editinstructorprofile.js')
+const suspend = require('./routes/instructorRoutes/suspend.js')
 
 const app = express()
 const port = 5000
@@ -55,6 +59,10 @@ app.use('/addtasks',addtasks)
 app.use('/studentthesis', studentthesis)
 app.use('/submit',submit)
 app.use('/confirmsubmission',confirmsubmission)
+app.use('/score',addscore)
+app.use('/getscore',getscore)
+app.use('/instructorinfo',instructorinfo)
+app.use('/suspend',suspend)
 
 mongoose.connect(databseURI)
     .then(()=>{

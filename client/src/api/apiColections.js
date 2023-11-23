@@ -353,3 +353,67 @@ export const confirmSubmission = async(taskid)=>{
     return "Something went wrong"
   }
 }
+export const addScore = async(thesisid,score)=>{
+  try{
+    const response = await fetch('/score',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid,score})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getAllRelatedToScore = async(thesisid)=>{
+  try{
+    const response = await fetch('/getscore',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const editInstructorProfile = async(phone,address)=>{
+  try{
+    const response = await fetch('/instructorinfo',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({phone,address})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const suspendThesis = async(thesisid)=>{
+  try{
+    const response = await fetch('/suspend',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
