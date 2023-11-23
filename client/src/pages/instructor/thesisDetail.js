@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { addTask, confirmSubmission, getInstructorSession, getStudentsInThesis, getTasksInThesis, getThesisSession } from "../../api/apiColections"
+import { addScore, addTask, confirmSubmission, getAllRelatedToScore, getInstructorSession, getStudentsInThesis, getTasksInThesis, getThesisSession, suspendThesis } from "../../api/apiColections"
 import { useNavigate } from "react-router-dom"
 
 export const ThesisDetail = () => {
@@ -10,11 +10,34 @@ export const ThesisDetail = () => {
     const [tasks, setTasks] = useState([])
     const [taskInput, setTaskInput] = useState('')
     const [studentList, setStudentList] = useState([])
+    const [score,setScore]=useState()
 
-    const handleReturn=()=>{
+    const handleSuspend=(ev)=>{
+        suspendThesis(thesis._id)
+            .then(respone=>{
+                respone.status ? alert('Thesis suspended') : alert('Internal error')
+            })
+    }
+    const handleScoring =()=>{
+        addScore(thesis._id,score)
+            .then(result=>{
+                result ? alert("sucess") :alert("fail")
+            })
+    }
+    const handleScoreOnChange =(ev)=>{
+        const temp = Number(ev.target.value)
+        if(temp>10){
+            setScore(10)
+        }
+        else if(temp<0){
+            setScore(0)
+        }
+        else setScore(temp)
+    }
+    const handleReturn = () => {
         navigate('/')
     }
-    const handleRefresh=()=>{
+    const handleRefresh = () => {
         window.location.reload()
     }
     const handleTaskInputOnChange = (ev) => {
@@ -56,20 +79,31 @@ export const ThesisDetail = () => {
                 else {
                     getThesisSession()
                         .then((value) => {
-                            console.log(value.thesis)
+                            // console.log(value.thesis)
                             setThesis(value.thesis)
-
-                            getStudentsInThesis(value.thesis._id)
-                                .then((s) => {
-                                    console.log(s)
-                                    setStudentList(s.studentList)
-                                    getTasksInThesis(value.thesis._id)
-                                        .then((tasks) => {
-                                            console.log(tasks.tasks)
-                                            setTasks(tasks.tasks)
-                                        })
-                                        .finally(() => setIsloading(false))
-                                })
+                            if(value.thesis.status==="Finished"){
+                                getAllRelatedToScore(value.thesis._id)
+                                    .then(respone=>{
+                                        // console.log(respone)
+                                        setStudentList(respone.studentList)
+                                        setScore(respone.scores[0].score)
+                                        setIsloading(false)
+                                    })
+                            }
+                            else{
+                                getStudentsInThesis(value.thesis._id)
+                                    .then((s) => {
+                                        console.log(s)
+                                        setStudentList(s.studentList)
+                                        getTasksInThesis(value.thesis._id)
+                                            .then((tasks) => {
+                                                console.log(tasks.tasks)
+                                                setTasks(tasks.tasks)
+                                            })
+                                            .finally(() => setIsloading(false))
+                                    })
+                            }
+                            
                         })
                 }
             })
@@ -81,8 +115,8 @@ export const ThesisDetail = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div style={{ paddingLeft: '25%', paddingRight: '25%', paddingTop: '25px' }}>
-            <div class="border border-success p-2 mb-2 border-opacity-75">
+        <div style={{ paddingInline:'25%', paddingTop: '25px'}}>
+            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
                 <h3>Project {thesis.name}</h3>
                 <h6>Category: {thesis.category}</h6>
                 <div class="form-floating mb-3">
@@ -90,7 +124,7 @@ export const ThesisDetail = () => {
                     <label disabled={true} for="floatingPlaintextInput">Project description:</label>
                 </div>
             </div>
-            <div class="border border-success p-2 mb-2 border-opacity-75">
+            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
                 <h3>Participants: </h3>
                 <form class="row g-3">
                     <div class="col-md-2">
@@ -120,19 +154,19 @@ export const ThesisDetail = () => {
                         </div>
                     </form>)}
             </div>
-            <div class="border border-success p-2 mb-2 border-opacity-75">
+            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
                 <h3>Task details: </h3>
                 <div class="input-group mb-3">
-                    <input onChange={handleTaskInputOnChange} type="text" class="form-control" placeholder="New task" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                    <button onClick={handleAddNewTask} class="btn btn-outline-secondary" type="button" id="button-addon2">Add new task</button>
+                    <input disabled={thesis.status==='Finished' || thesis.status==='Suspended'}  onChange={handleTaskInputOnChange} type="text" class="form-control" placeholder="New task" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                    <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'}  onClick={handleAddNewTask} class="btn btn-outline-secondary" type="button" id="button-addon2">Add new task</button>
                 </div>
                 {taskList.map((value, key) =>
                     <div class="input-group mb-3">
                         <input disabled={true} value={value} type="text" class="form-control" placeholder="Task" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                        <button onClick={handleRemoveTask} id={key} class="btn btn-outline-secondary" type="button" >Remove</button>
+                        <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'}   onClick={handleRemoveTask} id={key} class="btn btn-outline-secondary" type="button" >Remove</button>
                     </div>
                 )}
-                <button onClick={handleAddTask} type="button" class="btn btn-primary">Add tasks</button>
+                <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'}   onClick={handleAddTask} type="button" class="btn btn-primary">Add tasks</button>
                 <h3>Pending tasks: </h3>
                 {tasks.map((value, key) =>
                     (value.confirm === false) &&
@@ -157,8 +191,16 @@ export const ThesisDetail = () => {
                     </div>
                 )}
             </div>
-            <button onClick={handleReturn} style={{marginRight:'30px'}} type="button" class="btn btn-primary">Return</button>
-            <button onClick={handleRefresh} type="button" class="btn btn-primary">Refresh</button>
+            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Score</span>
+                    <input disabled={thesis.status==='Finished' || thesis.status==='Suspended'}  onChange={handleScoreOnChange} value={score} type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                    <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'} onClick={handleScoring} type="button" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+            <button onClick={handleReturn} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Return</button>
+            <button onClick={handleRefresh} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Refresh</button>
+            <button onClick={handleSuspend} disabled={thesis.status==='Finished' || thesis.status==='Suspended'} type="button" class="btn btn-danger">Suspend</button>
         </div>
     )
 }

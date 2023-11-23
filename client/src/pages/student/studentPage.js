@@ -32,12 +32,17 @@ export const StudentPage = (props) => {
         // }
         api.getStudentSession()
             .then((response)=>{
-                if(response.status===false){
+                console.log(response)
+                if(response.studentinfo===null || typeof(response.studentinfo)==='undefined'){
                     navigate('/')
                     return
                 }
-                console.log(response)
-                setIsLoading(false)
+                else{
+                    setIsLoading(false)
+                    console.log(response)
+                }
+                
+                
                 // response.json()
                 //     .then((data)=>{
                 //         console.log(data)
@@ -46,7 +51,6 @@ export const StudentPage = (props) => {
             })
     }, [])
     if (isLoading) return <h1>Loading</h1>
-    console.log(props.s)
     return (
         <div>
             <StudentNavBar></StudentNavBar>

@@ -10,17 +10,20 @@ export const LandingPage = () =>{
     useEffect(()=>{
         getStudentSession()
             .then((result)=>{
-                if(result.status){
+                if(result.studentinfo!==null && typeof(result.studentinfo)!=='undefined'){
                     navigate('/studenthomepage')
                     return
                 }
-                getInstructorSession()
+                else{
+                    getInstructorSession()
                     .then((r)=>{
-                        if(r.status){
+                        if(r.instructorinfo!==null && typeof(r.instructorinfo)!=='undefined'){
                             navigate('/instructorhomepage')
                             return
                         }
                     })
+                }
+                
             })
     },[])
     return(

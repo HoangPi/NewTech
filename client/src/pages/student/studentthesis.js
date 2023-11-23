@@ -11,6 +11,9 @@ export const StudentThesis = () => {
     const [taskEdit, setTaskEdit] = useState([])
     const [submissionList,setSubmissionList]=useState([])
 
+    const handleReturn=()=>{
+        navigate('/')
+    }
     const handleSubmission =async()=>{
         // submit(tasks,submissionList)
         //     .then((value)=>{
@@ -56,6 +59,11 @@ export const StudentThesis = () => {
                     .then(result => {
                         setThesis(result.thesis)
                         // console.log(result.thesis)
+                        if(typeof(result.thesis)==='undefined' || result.thesis===null){
+                            alert("Student does not have an on going thesis right now")
+                            navigate('/')
+                            return
+                        }
                         getTasksInThesis(result.thesis._id)
                             .then(t => {
                                 // console.log(t.tasks)
@@ -110,6 +118,7 @@ export const StudentThesis = () => {
                     </div>
                 )}
             </div>
+            <button onClick={handleReturn} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Return</button>
         </div>
     )
 }

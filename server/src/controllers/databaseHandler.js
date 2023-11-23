@@ -5,6 +5,7 @@ const Instructor = require("../models/instructor.js");
 const Category = require('../models/categories.js')
 const Thesis = require('../models/thesis.js')
 const Task = require('../models/task.js')
+const Score = require('../models/score.js')
 
 function setStudentSession(req, res) {
     Student.findOne({ id: req.body.id })
@@ -29,6 +30,7 @@ async function get1Student(req, res) {
         .then((studentinfo) => {
             res.json({ studentinfo })
         })
+        .catch(err=>{res.json({message:err})})
 }
 async function editStudent(req, res) {
     const doc = await Student.findOneAndUpdate({ id: req.body.studentinfo.id },
@@ -164,10 +166,15 @@ async function addTasks(req, res) {
     }
 }
 async function getThesisByID(req, res) {
+    
     Thesis.findOne({ _id: req.body.id })
         .then((result) => {
             // console.log(result)
             res.json({ thesis: result })
+        })
+        .catch(err=>{
+            console.log(err)
+            res.json({status:false})
         })
 }
 async function submitTasks(req, res) {
@@ -201,6 +208,88 @@ async function confirmTask(req, res) {
         res.json({ status: false })
     }
 }
+async function addScore(req,res){
+    try{
+        await Thesis.findOneAndUpdate({_id:req.body.thesisid},{status:'Finished'})
+        const students = await Student.find({thesisid:req.body.thesisid})
+        for(let student of students){
+            await Student.findOneAndUpdate({id:student.id},{thesisid:''})
+            let score = Score({
+                thesisid:req.body.thesisid,
+                studentid:student.id,
+                score:req.body.score,
+            })
+            await score.save()
+        }
+        res.json({status:true})
+    }
+    catch(err){
+        console.log(err)
+        res.json({status:false})
+    }
+}
+async function getScore(req,res){
+    try{
+        console.log(req.body)
+        const scores = await Score.find({thesisid:req.body.thesisid})
+        var students = []
+        for(let score of scores){
+            let temp = await Student.findOne({id:score.studentid})
+            students.push(temp)
+        }
+        res.json({studentList:students,scores: scores})
+    }
+    catch(error){
+        console.log(error)
+        res.json({status:false})
+    }
+}
+async function editInstructorProfile(req,res){
+    try{
+        if(typeof(req.session.instructorinfo)==='undefined' || req.session.instructorinfo===null){
+            res.json({status:false})
+        }
+        else{
+            Instructor.findOneAndUpdate({_id:req.session.instructorinfo._id},{
+                phone:req.body.phone,
+                address:req.body.address,
+            },
+            {returnOriginal:false})
+                .then(doc=>{
+                    req.session.instructorinfo=doc
+                    res.json({instructorinfo:doc})
+                })
+        }
+    }
+    catch(error){
+        console.log(error)
+        res.json({status:false})
+    }
+}
+function suspendThesis(req,res){
+    if(typeof(req.session.instructorinfo)==='undefined'|| req.session.instructorinfo===null){
+        res.json({status:false,message:"instructor session does not exist"})
+    }
+    else{
+        Thesis.findOneAndUpdate({_id:req.body.thesisid},{status:'Suspended',progress:0})
+            .then(result=>{
+                Student.updateMany({thesisid:req.body.thesisid},{thesisid:''})
+                    .then(r=>{
+                        console.log("Removed")
+                        res.json({status:true})
+                    })
+                    .catch(err=>{
+                        console.log(err)
+                        res.json({status:false})
+                    })
+            })
+            .catch(err=>{
+                console.log(err)
+                res.json({result:false})
+            })
+    }
+    
+}
 module.exports = {
     setStudentSession,
     editStudent,
@@ -215,4 +304,8 @@ module.exports = {
     getThesisByID,
     submitTasks,
     confirmTask,
+    addScore,
+    getScore,
+    editInstructorProfile,
+    suspendThesis,
 }

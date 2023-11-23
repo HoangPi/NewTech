@@ -7,6 +7,10 @@ export const EditStudentProfile = () => {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const [student, setStudent] = useState()
+
+    const handleReturn=()=>{
+        navigate('/')
+    }
     const handleEditButton = (ev) => {
         api.editStudentInfo(ev, student)
     }
@@ -39,7 +43,7 @@ export const EditStudentProfile = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div>
+        <div style={{paddingInline:'20%', paddingTop:'50px'}}>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Full name     </span>
                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.fullname} />
@@ -61,6 +65,7 @@ export const EditStudentProfile = () => {
                 <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handleAddressOnChange} value={student.address} />
             </div>
             <button type="button" class="btn btn-primary btn-lg" onClick={handleEditButton}>Edit</button>
+            <button type="button" style={{marginLeft:'20px'}} class="btn btn-primary btn-lg" onClick={handleReturn}>Return</button>
         </div>
     )
 }
