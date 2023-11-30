@@ -11,6 +11,9 @@ import { ManageThesis } from './pages/instructor/mangeThesis.js'
 import { AddThesis } from './pages/instructor/addThesis.js'
 import { ThesisDetail } from './pages/instructor/thesisDetail.js'
 import { StudentThesis } from './pages/student/studentthesis.js'
+import { ProposeThesis } from './pages/instructor/proposeThesis.js'
+import { JoinThesis } from './pages/student/joinThesis.js'
+import { ViewPendingThesis } from './pages/student/viewPendingThesis.js'
 
 function App() {
 
@@ -48,6 +51,9 @@ function App() {
           <Route path='/addthesis' element={<AddThesis></AddThesis>}></Route>
           <Route path='/thesisdetail' element={<ThesisDetail></ThesisDetail>}></Route>
           <Route path='/viewmythesis' element={<StudentThesis/>}></Route>
+          <Route path='/proposethesis' element={<ProposeThesis></ProposeThesis>}></Route>
+          <Route path='jointhesis' element={<JoinThesis/>}></Route>
+          <Route path='pendingthesis' element={<ViewPendingThesis></ViewPendingThesis>}></Route>
         </Routes>
       </Router>
     </div>

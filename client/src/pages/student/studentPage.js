@@ -50,7 +50,10 @@ export const StudentPage = (props) => {
                 //     })
             })
     }, [])
-    if (isLoading) return <h1>Loading</h1>
+    if (isLoading) return <div class="d-flex align-items-center">
+        <strong role="status">Loading...</strong>
+        <div class="spinner-border ms-auto" aria-hidden="true"></div>
+    </div>
     return (
         <div>
             <StudentNavBar></StudentNavBar>

@@ -417,3 +417,51 @@ export const suspendThesis = async(thesisid)=>{
     return "Something went wrong"
   }
 }
+export const proposeThesis = async (thesisname,category,description)=>{
+  try{
+    const response = await fetch('/propose',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisname,category,description})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getAllPendingThesis = async ()=>{
+  try{
+    const response = await fetch('/getpts',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getInstructorOfPendingThesis = async (thesisid)=>{
+  try{
+    const response = await fetch('/instructorpt',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}

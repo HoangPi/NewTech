@@ -26,6 +26,9 @@ const addscore = require('./routes/instructorRoutes/addscore.js')
 const getscore = require('./routes/instructorRoutes/getscore.js')
 const instructorinfo = require('./routes/instructorRoutes/editinstructorprofile.js')
 const suspend = require('./routes/instructorRoutes/suspend.js')
+const propose = require('./routes/instructorRoutes/propose.js')
+const getpts = require('./routes/studentRoutes/getpts.js')
+const instructorpt = require('./routes/studentRoutes/instructorpt.js')
 
 const app = express()
 const port = 5000
@@ -63,6 +66,9 @@ app.use('/score',addscore)
 app.use('/getscore',getscore)
 app.use('/instructorinfo',instructorinfo)
 app.use('/suspend',suspend)
+app.use('/propose',propose)
+app.use('/getpts',getpts)
+app.use('/instructorpt',instructorpt)
 
 mongoose.connect(databseURI)
     .then(()=>{

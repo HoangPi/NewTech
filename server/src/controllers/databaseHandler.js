@@ -6,6 +6,7 @@ const Category = require('../models/categories.js')
 const Thesis = require('../models/thesis.js')
 const Task = require('../models/task.js')
 const Score = require('../models/score.js')
+const PendingThesis = require('../models/pendingThesis.js')
 
 function setStudentSession(req, res) {
     Student.findOne({ id: req.body.id })
@@ -290,6 +291,47 @@ function suspendThesis(req,res){
     }
     
 }
+function proposeThesis(req,res){
+    if(typeof(req.session.instructorinfo)==='undefined' || req.session.instructorinfo===null){
+        res.json({message:"Instructor session does not exist"})
+    }
+    else{
+        const pd = new PendingThesis({
+            name: req.body.thesisname,
+            instructorid: req.session.instructorinfo._id,
+            category: req.body.category,
+            description: req.body.description,
+        })
+        pd.save()
+            .then(document=>{
+                res.json({doc: document})
+            })
+    }
+}
+function getAllPendingThesis(req,res){
+    PendingThesis.find()
+        .then(docs=>{
+            // console.log(docs)
+            res.json({theses:docs})
+        })
+        .catch(err=>{
+            console.log(err)
+            res.json({message:"There is no avaiable thesis"})
+        })
+}
+function getAllRelatedToPendingThesis(req,res){
+    PendingThesis.findOne({_id:req.body.thesisid})
+        .then(pt=>{
+            Instructor.findOne({_id:pt._doc.instructorid})
+                .then(ins=>{
+                    res.json({thesis:pt._doc,instructor:ins._doc})
+                })
+        })
+        .catch(err=>{
+            console.log(err)
+            res.json({message:"Fail to retrive data"})
+        })
+}
 module.exports = {
     setStudentSession,
     editStudent,
@@ -308,4 +350,7 @@ module.exports = {
     getScore,
     editInstructorProfile,
     suspendThesis,
+    proposeThesis,
+    getAllPendingThesis,
+    getAllRelatedToPendingThesis,
 }
