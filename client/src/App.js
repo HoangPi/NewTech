@@ -14,6 +14,7 @@ import { StudentThesis } from './pages/student/studentthesis.js'
 import { ProposeThesis } from './pages/instructor/proposeThesis.js'
 import { JoinThesis } from './pages/student/joinThesis.js'
 import { ViewPendingThesis } from './pages/student/viewPendingThesis.js'
+import { PendingTheses } from './pages/instructor/pendingTheses.js'
 
 function App() {
 
@@ -52,8 +53,9 @@ function App() {
           <Route path='/thesisdetail' element={<ThesisDetail></ThesisDetail>}></Route>
           <Route path='/viewmythesis' element={<StudentThesis/>}></Route>
           <Route path='/proposethesis' element={<ProposeThesis></ProposeThesis>}></Route>
-          <Route path='jointhesis' element={<JoinThesis/>}></Route>
-          <Route path='pendingthesis' element={<ViewPendingThesis></ViewPendingThesis>}></Route>
+          <Route path='/jointhesis' element={<JoinThesis/>}></Route>
+          <Route path='/pendingthesis' element={<ViewPendingThesis></ViewPendingThesis>}></Route>
+          <Route path='/pendingtheses' element={<PendingTheses/>}></Route>
         </Routes>
       </Router>
     </div>

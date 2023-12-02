@@ -465,3 +465,99 @@ export const getInstructorOfPendingThesis = async (thesisid)=>{
     return "Something went wrong"
   }
 }
+export const joinThesis = async (thesisid)=>{
+  try{
+    const response = await fetch('/jointhesis',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const cancleRequest = async (thesisid)=>{
+  try{
+    const response = await fetch('/cancelrequest',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getInstructorPendingTheses = async()=>{
+  try{
+    const response = await fetch('/getpendingtheses',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getStudentsInPendingThesis = async(thesisid)=>{
+  try{
+    const response = await fetch('/studentipt',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const confirmRequest = async (students,thesis)=>{
+  try{
+    const response = await fetch('/confirmrequest',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesis,students})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const removePropose = async (thesis)=>{
+  try{
+    const response = await fetch('/removepropose',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesis})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}

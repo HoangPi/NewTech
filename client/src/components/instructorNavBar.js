@@ -48,6 +48,13 @@ export const InstructorNavBar = () => {
                             </a>
                         </div>
                     </ul>
+                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
+                        <div style={{marginLeft:'20px'}} class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a href="/pendingtheses">
+                                <button class="btn btn-outline-success" type="submit">Pending theses</button>
+                            </a>
+                        </div>
+                    </ul>
                     <ul style={{ marginLeft: '50%', marginRight: 0 }} class="navbar-nav me-auto mb-2 mb-lg-0">
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                             <button type="button" class="btn btn-success" onClick={handleSignOut}>Sign out</button>
