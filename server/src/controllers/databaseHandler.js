@@ -7,6 +7,7 @@ const Thesis = require('../models/thesis.js')
 const Task = require('../models/task.js')
 const Score = require('../models/score.js')
 const PendingThesis = require('../models/pendingThesis.js')
+const PendingStudent = require('../models/pendingStudent.js')
 
 function setStudentSession(req, res) {
     Student.findOne({ id: req.body.id })
@@ -332,6 +333,149 @@ function getAllRelatedToPendingThesis(req,res){
             res.json({message:"Fail to retrive data"})
         })
 }
+function JoinThesis(req,res){
+    try{
+        if(typeof(req.session.studentinfo)==='undefined' || req.session.studentinfo === null){
+            res.json({confirm:false})
+        }
+        else{
+            PendingStudent.exists({studentid:req.session.studentinfo._id,
+                                thesisid:req.body.thesisid})
+                .then(check=>{
+                    if(check){
+                        res.json({})
+                    }
+                    else{
+                        const temp = new PendingStudent({
+                            thesisid:req.body.thesisid,
+                            studentid:req.session.studentinfo,
+                        })
+                        temp.save()
+                            .then(doc=>{
+                                res.json({confirm:true})
+                            })
+                    }
+                })
+            
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.json({confirm:false,error:err})
+    }
+}
+function CancelRequest(req,res){
+    try{
+        if(typeof(req.session.studentinfo)==='undefined'||req.session.studentinfo===null){
+            res.json({confirm:false})
+        }
+        else{
+            PendingStudent.deleteOne({thesisid:req.body.thesisid,studentid:req.session.studentinfo._id})
+                .then(()=>{
+                    res.json({confirm:true})
+                })
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.json({error:err,confirm:false})
+    }
+}
+function getPendingTheses(req,res){
+    try{
+        if(typeof(req.session.instructorinfo)==='undefined'||req.session.instructorinfo===null){
+            res.json({})
+        }
+        else{
+            PendingThesis.find({instructorid:req.session.instructorinfo._id})
+                .then(async (docs)=>{
+                    var stdBatch=[]
+                    for(let doc of docs){
+                        let temp = await PendingStudent.find({thesisid:doc._doc._id}).populate('studentid')
+                        try{
+                            console.log(temp)
+                            stdBatch.push(temp)
+                        }
+                        catch(ex){
+                            //For collections that have no student
+                        }
+                    }
+                    res.json({theses:docs,confirm:true, students:stdBatch})
+                })
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.json({confirm:false})
+
+    }
+}
+function stdPendingThesis(req,res){
+    // This is currently not in used
+    try{
+        if(typeof(req.session.instructorinfo)==='undefined'||req.session.instructorinfo===null){
+            res.json({})
+        }
+        else{
+            PendingThesis.find({instructorid:req.session.instructorinfo._id})
+                .then(docs=>{
+                    res.json({theses:docs,confirm:true})
+                })
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.json({confirm:false})
+    }
+}
+function confirmRequest(req,res){
+    try{
+        if(typeof(req.session.instructorinfo)==='undefined' || req.session.instructorinfo===null){
+            res.json({confirm:false,message:'Session not found'})
+        }
+        else{
+            const t = new Thesis({
+                _id: req.body.thesis._id,
+                name: req.body.thesis.name,
+                category: req.body.thesis.category,
+                instructorid: req.session.instructorinfo._id,
+                description: req.body.thesis.description,
+                progress: 0,
+                status: 'on going',
+            })
+            t.save()
+                .then(async () => {
+                    for(let id of req.body.students){
+                        await Student.findOneAndUpdate({id:id[0]},{thesisid:req.body.thesis._id})
+                        await PendingStudent.deleteMany({studentid:id[1]})
+                    }
+                    await PendingThesis.findByIdAndDelete(req.body.thesis._id)
+                    res.json({confirm:true})
+                })
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.json({confirm:false})
+    }
+}
+async function removePropose(req,res){
+    try{
+        if(typeof(req.session.instructorinfo) === 'undefined' || req.session.instructorinfo===null){
+            res.json({message:"Session not found"})
+        }
+        else{
+            await PendingThesis.findByIdAndDelete(req.body.thesis)
+            await PendingStudent.deleteMany({thesisid:req.body.thesis})
+            res.json({confirm:true})
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.json({confirm:false})
+    }
+    // PendingThesis.deleteOne(req.body.thesis)
+}
 module.exports = {
     setStudentSession,
     editStudent,
@@ -353,4 +497,10 @@ module.exports = {
     proposeThesis,
     getAllPendingThesis,
     getAllRelatedToPendingThesis,
+    JoinThesis,
+    CancelRequest,
+    getPendingTheses,
+    stdPendingThesis,
+    confirmRequest,
+    removePropose,
 }
