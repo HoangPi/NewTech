@@ -35,6 +35,10 @@ const getpendingtheses = require('./routes/instructorRoutes/getpendingtheses.js'
 const studentipt = require('./routes/instructorRoutes/studentipt.js')
 const confirmrequest = require('./routes/instructorRoutes/confirmrequest.js')
 const removepropose = require('./routes/instructorRoutes/removepropose.js')
+const getinstructors = require('./routes/instructorRoutes/getinstructors.js')
+const defend = require('./routes/instructorRoutes/defend.js')
+const getdefend = require('./routes/instructorRoutes/getdefend.js')
+const getinstructordefense = require('./routes/instructorRoutes/getinstructordefense.js')
 
 const app = express()
 const port = 5000
@@ -81,6 +85,10 @@ app.use('/getpendingtheses',getpendingtheses)
 app.use('/studentipt',studentipt)
 app.use('/confirmrequest',confirmrequest)
 app.use('/removepropose', removepropose)
+app.use('/getinstructors',getinstructors)
+app.use('/defend',defend)
+app.use('/getdefend',getdefend)
+app.use('/getinstructordefense',getinstructordefense)
 
 mongoose.connect(databseURI)
     .then(()=>{

@@ -561,3 +561,67 @@ export const removePropose = async (thesis)=>{
     return "Something went wrong"
   }
 }
+export const getAllInstructor = async ()=>{
+  try{
+    const response = await fetch('/getinstructors',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const setDefendDate = async (instructorid,thesisid,date)=>{
+  try{
+    const response = await fetch('/defend',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({instructorid,thesisid,date})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getDefenseDate = async (thesisid)=>{
+  try{
+    const response = await fetch('/getdefend',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({thesisid})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
+export const getInstructorDefense = async ()=>{
+  try{
+    const response = await fetch('/getinstructordefense',{
+      method:"POST",
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({})
+    })
+    const data = await response.json()
+    return data
+  }
+  catch(error){
+    return "Something went wrong"
+  }
+}
