@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getInstructorSession, getThesisByInstructorID, setThesisSession } from "../../api/apiColections"
+import {InstructorNavBar} from '../../components/instructorNavBar.js'
 
 export const ManageThesis = () => {
     const [thesisList, setThesisList] = useState([])
@@ -58,7 +59,11 @@ export const ManageThesis = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div style={{ paddingLeft: '25%', paddingRight: '25%', paddingTop: '25px' }}>
+        <>
+        <div>
+            <InstructorNavBar></InstructorNavBar>
+        </div>
+        <div style={{ paddingLeft: '25%', paddingRight: '25%', paddingTop: '100px' }}>
             {thesisList.map((value, key) => {
                 var percentage= value.progress + '%'
                 console.log(percentage)
@@ -74,10 +79,10 @@ export const ManageThesis = () => {
                                                                                                                 ?'#DC3545'
                                                                                                                 :'#38A169'}}>{value.status}</span></h6>
                                 <p class="card-text">{value.description}.</p>
-                                <a id={key} onClick={handleThesisSessionOnChange} class="card-link">Detail</a>
+                                <a id={key} onClick={handleThesisSessionOnChange} class="card-link"><button className="btn btn-primary fs-6 px-0 col-1 py-1" type="button">Detail</button></a>
                             </div>
-                            <h5>Progress</h5>
-                            <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <h5 class="px-3">Progress</h5>
+                            <div class="progress m-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                                 <div class="progress-bar" style={{width: percentage}}>{percentage}</div>
                             </div>
                         </div>
@@ -85,7 +90,8 @@ export const ManageThesis = () => {
                     </>
                 )
             })}
-            <button onClick={handleReturn} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Return</button>
+            <button onClick={handleReturn} style={{ marginRight: '30px' }} type="button" class="btn btn-primary mx-3">Return</button>
         </div>
+        </>
     )
 }

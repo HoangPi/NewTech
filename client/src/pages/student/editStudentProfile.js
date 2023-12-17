@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 import { useNavigate } from 'react-router-dom'
 import * as api from '../../api/apiColections.js'
+import { StudentNavBar } from "../../components/studentNavBar"
 
 export const EditStudentProfile = () => {
     const navigate = useNavigate()
@@ -65,29 +66,33 @@ export const EditStudentProfile = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div style={{paddingInline:'20%', paddingTop:'50px'}}>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Full name     </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.fullname} />
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Student ID    </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.id} />
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">class         </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.classid} />
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Phone number  </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handlePhoneOnChange} value={student.phone} />
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Address       </span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handleAddressOnChange} value={student.address} />
-            </div>
-            <button type="button" class="btn btn-primary btn-lg" onClick={handleEditButton}>Edit</button>
-            <button type="button" style={{marginLeft:'20px'}} class="btn btn-primary btn-lg" onClick={handleReturn}>Return</button>
+    
+        <><div>
+            <StudentNavBar></StudentNavBar>
         </div>
+        <div style={{ paddingInline: '20%', paddingTop: '100px' }}>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" style={{ width: '15%' }} id="inputGroup-sizing-default">Full name     </span>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.fullname} />
+                </div>
+                <div class="input-group mb-3" >
+                    <span class="input-group-text" style={{ width: '15%' }} id="inputGroup-sizing-default">Student ID    </span>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.id} />
+                </div>
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text" style={{ width: '15%' }} id="inputGroup-sizing-default">Class         </span>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled={true} value={student.classid} />
+                </div>
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text" style={{ width: '15%' }} id="inputGroup-sizing-default">Phone number  </span>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handlePhoneOnChange} value={student.phone} />
+                </div>
+                <div class="input-group mb-3 ">
+                    <span class="input-group-text" style={{ width: '15%' }} id="inputGroup-sizing-default">Address       </span>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" onChange={handleAddressOnChange} value={student.address} />
+                </div>
+                <button type="button" class="btn btn-primary fs-5 ms-2 float-end" style={{ width: '10%' }} onClick={handleReturn}>Return</button>
+                <button type="button" class="btn btn-primary fs-5 me-2 float-end" style={{ width: '10%' }} onClick={handleEditButton}>Edit</button>
+            </div></>
     )
 }

@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode"
 import { useEffect, useState } from "react"
 import * as api from '../api/apiColections.js'
 import { useNavigate } from "react-router-dom"
+import styles from "../public/styles.module.css";
 
 export const SignIn = () => {
     var signInOption=true
@@ -53,30 +54,52 @@ export const SignIn = () => {
         google.accounts.id.renderButton(
             document.getElementById("signInDiv"),
             { theme: "outline", size: "large" }
-
         )
     }, [])
 
     return (
-        <main class="form-signin w-100 m-auto">
-            <form style={{ paddingLeft: "25%", paddingRight: "25%" }}>
-                {/* <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57" /> */}
-                <h1 class="h3 mb-3 fw-normal">Please sign in using your Google account</h1>
-                <div style={{ paddingLeft: "25%",paddingRight:"25%" }} id="signInDiv"></div>
-                <div onClick={changeToStudent} class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={signInOption}/>
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        Sign in as student
-                    </label>
-                </div>
-                <div onClick={changeToInstructor} class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  />
-                    <label class="form-check-label" for="flexRadioDefault2">
-                        Sign in as instructor
-                    </label>
-                </div>
-                <p class="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
-            </form>
+        <main className="form-signin w-100 m-auto h-auto">
+            <div className={styles.containerBig}>
+                <form style={{ padding: "0 25%"}} >
+                    <div className={styles.container}>
+                    <h1 className={styles.heading}>Login </h1>
+                    <div className={styles.form_container}>
+                        <div className={styles.left}>
+                            <img className={styles.img} src="http://hcmute.edu.vn/Resources/Images/SubDomain/icsse2017/HCMUTE.jpg" alt="login" />
+                        </div>
+                        <div className={styles.right}>
+                            <h2 className={styles.from_heading} >Welcome Log in</h2>
+                            <div className={styles.google_btn} id="signInDiv" style={{'margin-top': '60px'}} ></div>
+                            <h2 class="p-0" style={{color: '#2c444e',fontSize:'20px',fontWeight:'400'}}>Select Your Roll</h2>
+                            <select class="form-select w-50" aria-label="Default select example">
+                                <option onClick={changeToStudent} selected>Student</option>
+                                <option onClick={changeToInstructor}>Instructor</option>
+                            </select>
+                            
+                            {/* <div style={{display: 'flex', 'flexDirection':'column'}}>
+                                <div onClick={changeToStudent} className="form-check">
+                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={signInOption}/>
+                                    <label className="form-check-label" for="flexRadioDefault1">
+                                        Sign in as student
+                                    </label>
+                                </div>
+                                <div onClick={changeToInstructor} className="form-check">
+                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  />
+                                    <label className="form-check-label" for="flexRadioDefault2">
+                                        Sign in as instructor
+                                    </label>
+                                </div>
+                            </div> */}
+                            <p className="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
+                        </div>
+                        </div>
+                    </div>
+                    {/* <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57" /> */}
+                    
+                    
+                    
+                </form>
+            </div>
         </main>
     )
 }

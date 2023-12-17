@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { addThesis, get1StudentByID, getCategories, getInstructorSession } from "../../api/apiColections"
 import { useNavigate } from 'react-router-dom'
+import {InstructorNavBar} from '../../components/instructorNavBar.js'
 
 export const AddThesis = () => {
     const [categories, setCategories] = useState([])
@@ -103,25 +104,27 @@ export const AddThesis = () => {
 
     }, [])
     return (
-        <div style={{ paddingInline:'20%', paddingTop: '50px' }}>
-            <div class="input-group mb-3">
-                <input onChange={handelStudentIDChange} type="text" class="form-control" placeholder="Student ID" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                <button onClick={findStudent} class="btn btn-outline-secondary" type="button" id="button-addon2">Find</button>
-            </div>
-            <form class="row g-3">
-                <div class="col-md-2">
-                    <label for="inputZip" class="form-label">Class</label>
-
+        <>
+        <div>
+            <InstructorNavBar></InstructorNavBar>
+        </div>
+        <div style={{ paddingInline: '20%', paddingTop: '100px' }}>
+                <div class="input-group mb-3">
+                    <input onChange={handelStudentIDChange} type="text" class="form-control" placeholder="Student ID" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                    <button onClick={findStudent} class="btn btn-outline-secondary col-1" type="button" id="button-addon2">Find</button>
                 </div>
-                <div class="col-md-4">
-                    <label for="inputCity" class="form-label">Student ID</label>
-                </div>
-                <div class="col-md-6">
-                    <label for="inputName" class="form-label">Name</label>
-                </div>
-            </form>
-            {studentList.map((value, key) =>
                 <form class="row g-3">
+                    <div class="col-md-2">
+                        <label for="inputZip" class="form-label">Class</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputCity" class="form-label">Student ID</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputName" class="form-label">Name</label>
+                    </div>
+                </form>
+                {studentList.map((value, key) => <form class="row g-3">
                     <div class="col-md-2">
                         <input disabled={true} type="text" placeholder={value.classid} class="form-control" id="inputZip" aria-describedby="button-addon2" />
 
@@ -132,45 +135,47 @@ export const AddThesis = () => {
                     <div class="col-md-6">
                         <div id="inputName" class="input-group mb-3">
                             <input disabled={true} type="text" placeholder={value.fullname} class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                            <button id={key} onClick={handelRemoveStudent} class="btn btn-outline-secondary" type="button" >Remove</button>
+                            <button id={key} onClick={handelRemoveStudent} class="btn btn-outline-secondary col-2 p-0" type="button">Remove</button>
                         </div>
                     </div>
                 </form>
-            )}
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Thesis Name</span>
-                <input onChange={handelThesisNameOnChange} value={thesisName} type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-            </div>
-            {!option1
-                ? <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputGroupSelect01">Category</label>
-                    <select onChange={handelCategoryOnChange} class="form-select" id="inputGroupSelect01">
-                        {categories.map((value, key) =>
-                            <option value={key}>{value.name}</option>
-                        )}
-                    </select>
+                )}
+                <div class="input-group mb-3">
+                    <span class="input-group-text col-2" id="inputGroup-sizing-default">Thesis Name</span>
+                    <input onChange={handelThesisNameOnChange} value={thesisName} type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
                 </div>
-                : <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">New category</span>
-                    <input onChange={handleNewCategoryOnChange} value={newCategory} type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-                </div>}
+                {!option1
+                    ? <div class="input-group mb-3">
+                        <label class="input-group-text col-2" for="inputGroupSelect01">Category</label>
+                        <select onChange={handelCategoryOnChange} class="form-select" id="inputGroupSelect01">
+                            {categories.map((value, key) => <option value={key}>{value.name}</option>
+                            )}
+                        </select>
+                    </div>
+                    : <div class="input-group mb-3">
+                        <span class="input-group-text col-2" id="inputGroup-sizing-default">New category</span>
+                        <input onChange={handleNewCategoryOnChange} value={newCategory} type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                    </div>}
 
-            <div class="form-check" style={{paddingBottom:'20px'}}>
-                <input onChange={handelOption1OnChange} class="form-check-input" type="checkbox" id="flexCheckDefault" />
-                <label class="form-check-label" for="flexCheckDefault">
-                    Add New Category
-                </label>
-            </div>
-            <div class="input-group" style={{paddingBottom:'20px'}}>
-                <span class="input-group-text">Description</span>
-                <textarea onChange={handleDescriptionOnChange} class="form-control" aria-label="With textarea"></textarea>
-            </div>
-            <button onClick={submitHandler} style={{marginRight:'20px'}} type="button" class="btn btn-primary">Submit</button>
-            <a href="/instructorhomepage">
-                <button type="button" class="btn btn-primary">Return</button>
-            </a>
-            
+                <div class="form-check" style={{ paddingBottom: '20px' }}>
+                    <input onChange={handelOption1OnChange} class="form-check-input" type="checkbox" id="flexCheckDefault" />
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Add New Category
+                    </label>
+                </div>
+                <div class="input-group" style={{ paddingBottom: '20px' }}>
+                    <span class="input-group-text col-2">Description</span>
+                    <textarea onChange={handleDescriptionOnChange} class="form-control" aria-label="With textarea"></textarea>
+                </div>
 
-        </div>
+                <a href="/instructorhomepage">
+                    <button type="button" class="btn btn-primary float-end ms-4 fs-6">Return</button>
+                </a>
+
+                <button onClick={submitHandler} type="button" class="btn btn-primary float-end fs-6">Submit</button>
+                
+
+
+            </div></>
     )
 }

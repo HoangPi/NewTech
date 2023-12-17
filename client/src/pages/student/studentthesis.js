@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getStudentSession, getStudentThesis, getTasksInThesis, submit } from "../../api/apiColections"
+import { StudentNavBar } from "../../components/studentNavBar"
 
 export const StudentThesis = () => {
     const navigate = useNavigate()
@@ -83,32 +84,34 @@ export const StudentThesis = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div style={{ paddingLeft: '15%', paddingRight: '15%', paddingTop: '25px' }}>
-            <div class="border border-success p-2 mb-2 border-opacity-75">
-                <h3>Project {thesis.name}</h3>
-                <h6>Category: {thesis.category}</h6>
-                <div class="form-floating mb-3">
-                    <input type="email" disabled={true} readonly class="form-control-plaintext" id="floatingPlaintextInput" placeholder="Description" value={thesis.description} />
-                    <label disabled={true} for="floatingPlaintextInput">Project description:</label>
+        <>
+        <div>
+            <StudentNavBar></StudentNavBar>
+        </div>
+        <div style={{ paddingLeft: '15%', paddingRight: '15%', paddingTop: '100px' }}>
+                <div class="border border-success p-2 mb-2 border-opacity-75">
+                    <h3>Project {thesis.name}</h3>
+                    <h6>Category: {thesis.category}</h6>
+                    <div class="form-floating mb-3">
+                        <input type="email" disabled={true} readonly class="form-control-plaintext" id="floatingPlaintextInput" placeholder="Description" value={thesis.description} />
+                        <label disabled={true} for="floatingPlaintextInput">Project description:</label>
+                    </div>
                 </div>
-            </div>
-            <div class="border border-success p-2 mb-2 border-opacity-75">
-                <h3 style={{paddingBottom:'20px'}}>Unfinished tasks:</h3>
-                {tasks.map((value, key) =>
-                    (value.confirm === false) && <div>
+                <div class="border border-success p-2 mb-2 border-opacity-75">
+                    <h3 style={{ paddingBottom: '20px' }}>Unfinished tasks:</h3>
+                    {tasks.map((value, key) => (value.confirm === false) && <div>
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">{value.job}</label>
                         </div>
                         <div class="input-group mb-3">
                             <input onChange={handleSubmissionOnChange} disabled={!taskEdit[key]} id={key} value={submissionList[key]} type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" />
-                            <button style={{width:'100px'}} onClick={handleEditTask} class="btn btn-outline-secondary" value={key} type="button" id="button-addon1">{!taskEdit[key] ? "Edit" : "Confirm"}</button>
+                            <button style={{ width: '100px' }} onClick={handleEditTask} class="btn btn-outline-secondary" value={key} type="button" id="button-addon1">{!taskEdit[key] ? "Edit" : "Confirm"}</button>
                         </div>
                     </div>
-                )}
-                <button onClick={handleSubmission} type="button" class="btn btn-success">Submit</button>
-                <h3>Finished tasks: </h3>
-                {tasks.map(value=>
-                    (value.confirm === true) && <div>
+                    )}
+                    <button onClick={handleSubmission} type="button" class="btn btn-success">Submit</button>
+                    <h3 class="mt-3">Finished tasks: </h3>
+                    {tasks.map(value => (value.confirm === true) && <div>
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">{value.job}</label>
                         </div>
@@ -116,9 +119,9 @@ export const StudentThesis = () => {
                             <input disabled={true} value={value.submission} type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" />
                         </div>
                     </div>
-                )}
-            </div>
-            <button onClick={handleReturn} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Return</button>
-        </div>
+                    )}
+                </div>
+                <button onClick={handleReturn}  type="button" class="btn btn-primary float-end m-3">Return</button>
+            </div></>
     )
 }
