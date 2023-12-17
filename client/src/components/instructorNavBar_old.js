@@ -12,54 +12,60 @@ export const InstructorNavBar = () => {
     }
 
     return (
-        <nav style={{ alignContent: 'center' }} class="navbar navbar-expand-lg navbar-light bg-light">
-            <div style={{ width: '85%' }} class="container-fluid">
-                <a class="navbar-brand" href="#">Instructor</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar bg-body-tertiary fixed-top">
+            <div class="container-fluid shadow-sm">
+                <a class="navbar-brand fs-3" href="/instructorhomepage">Instructor</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/addthesis">
-                                <button class="btn btn-outline-success" type="submit" style={{marginLeft:'20px', marginRight: '25px' }}>Add Thesis</button>
-                            </a>
-                        </div>
-                    </ul>
-                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
-                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/instructortheses">
-                                <button class="btn btn-outline-success" type="submit" style={{ marginRight: '25px' }}>Thesis</button>
-                            </a>
-                        </div>
-                    </ul>
-                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
-                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/instructorprofile">
-                                <button class="btn btn-outline-success" type="submit">Profile</button>
-                            </a>
-                        </div>
-                    </ul>
-                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
-                        <div style={{marginLeft:'20px'}} class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/proposethesis">
-                                <button class="btn btn-outline-success" type="submit">Propose thesis</button>
-                            </a>
-                        </div>
-                    </ul>
-                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
-                        <div style={{marginLeft:'20px'}} class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <a href="/pendingtheses">
-                                <button class="btn btn-outline-success" type="submit">Pending theses</button>
-                            </a>
-                        </div>
-                    </ul>
-                    <ul style={{ marginLeft: '50%', marginRight: 0 }} class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <button type="button" class="btn btn-success" onClick={handleSignOut}>Sign out</button>
-                        </div>
-                    </ul>
+                <div class="offcanvas offcanvas-end " style={{ width: '300px' }} tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    
+                    <div class="offcanvas-header border-bottom border-black border-2">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Homepage</h5>
+                        <button type="button" class="btn-close " data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            
+                            <li class="nav-item">
+                                <a href="/instructorhomepage">
+                                    <button className="btn bg-transparent fs-6 px-0" type="button">Home</button>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a href="/addthesis">
+                                    <button className="btn bg-transparent fs-6 px-0" type="submit">Add Thesis</button>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/instructortheses">
+                                    <button className="btn bg-transparent fs-6 px-0" type="submit">Thesis</button>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/instructorprofile">
+                                    <button className="btn bg-transparent fs-6 px-0" type="submit">Profile</button>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/proposethesis">
+                                    <button className="btn bg-transparent fs-6 px-0" type="submit">Propose thesis</button>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/pendingtheses">
+                                    <button className="btn bg-transparent fs-6 px-0" type="submit">Pending theses</button>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                    <a href="#">
+                                        <button className="btn bg-transparent fs-6 px-0 " type="button" onClick={handleSignOut}>Sign out</button>
+                                    </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
