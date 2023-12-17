@@ -136,7 +136,7 @@ export const ThesisDetail = () => {
                     setInstructor(instructor.instructorinfo)
                     getThesisSession()
                         .then(async (value) => {
-                            // console.log(value.thesis)
+                            console.log(value.thesis)
                             setThesis(value.thesis)
                             let temp = await getDefenseDate(value.thesis._id)
                             if(temp.defense){

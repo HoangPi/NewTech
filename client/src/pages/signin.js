@@ -6,18 +6,12 @@ import { useNavigate } from "react-router-dom"
 import styles from "../public/styles.module.css";
 
 export const SignIn = () => {
-    var signInOption=true
+    var signInOption = true
     const navigate = useNavigate()
-    const changeToStudent = ()=>{
-        signInOption=true
-        console.log(signInOption)
-    }
-    const changeToInstructor = ()=>{
-        signInOption=false
-        console.log(signInOption)
-        
-    }
 
+    const handleSignInOptionOnChange=(ev)=>{
+        signInOption=(ev.target.value==='Student')
+    }
 
     function handleCallbackResponse(response) {
         var userObject = jwtDecode(response.credential)
@@ -60,7 +54,7 @@ export const SignIn = () => {
     return (
         <main className="form-signin w-100 m-auto h-auto">
             <div className={styles.containerBig}>
-                <form style={{ padding: "0 25%"}} >
+                <div style={{ padding: "0 25%"}} >
                     <div className={styles.container}>
                     <h1 className={styles.heading}>Login </h1>
                     <div className={styles.form_container}>
@@ -71,25 +65,11 @@ export const SignIn = () => {
                             <h2 className={styles.from_heading} >Welcome Log in</h2>
                             <div className={styles.google_btn} id="signInDiv" style={{'margin-top': '60px'}} ></div>
                             <h2 class="p-0" style={{color: '#2c444e',fontSize:'20px',fontWeight:'400'}}>Select Your Roll</h2>
-                            <select class="form-select w-50" aria-label="Default select example">
-                                <option onClick={changeToStudent} selected>Student</option>
-                                <option onClick={changeToInstructor}>Instructor</option>
+                            <select onChange={handleSignInOptionOnChange} class="form-select w-50" aria-label="Default select example">
+                                <option selected>Student</option>
+                                <option >Instructor</option>
                             </select>
-                            
-                            {/* <div style={{display: 'flex', 'flexDirection':'column'}}>
-                                <div onClick={changeToStudent} className="form-check">
-                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={signInOption}/>
-                                    <label className="form-check-label" for="flexRadioDefault1">
-                                        Sign in as student
-                                    </label>
-                                </div>
-                                <div onClick={changeToInstructor} className="form-check">
-                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  />
-                                    <label className="form-check-label" for="flexRadioDefault2">
-                                        Sign in as instructor
-                                    </label>
-                                </div>
-                            </div> */}
+                            <button onClick={()=>{console.log(signInOption)}}>Test</button>
                             <p className="mt-5 mb-3 text-body-secondary">© 2017–2023</p>
                         </div>
                         </div>
@@ -98,7 +78,7 @@ export const SignIn = () => {
                     
                     
                     
-                </form>
+                </div>
             </div>
         </main>
     )

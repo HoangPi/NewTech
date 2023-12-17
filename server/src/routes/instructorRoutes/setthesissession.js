@@ -5,6 +5,7 @@ const app = require('../../server.js')
 router.use((req,res,next)=>{
     try{
         req.session.thesisIndex=req.body.id
+        console.log(req.body.id)
         res.json({status:true})
     }
     catch{

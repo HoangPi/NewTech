@@ -79,14 +79,13 @@ export const ManageThesis = () => {
                                                                                                                 ?'#DC3545'
                                                                                                                 :'#38A169'}}>{value.status}</span></h6>
                                 <p class="card-text">{value.description}.</p>
-                                <a id={key} onClick={handleThesisSessionOnChange} class="card-link"><button className="btn btn-primary fs-6 px-0 col-1 py-1" type="button">Detail</button></a>
+                                <a onClick={handleThesisSessionOnChange} class="card-link"><button id={key} className="btn btn-primary fs-6 px-0 col-1 py-1" type="button">Detail</button></a>
                             </div>
                             <h5 class="px-3">Progress</h5>
                             <div class="progress m-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                                 <div class="progress-bar" style={{width: percentage}}>{percentage}</div>
                             </div>
                         </div>
-                        
                     </>
                 )
             })}

@@ -7,6 +7,7 @@ router.use((req,res,next)=>{
     //     res.json({instructorinfo: req.session.instructorinfo,status:true})
     //     return
     // }
+    console.log(req.session.thesisIndex)
     res.json({thesis:req.session.thesisList[req.session.thesisIndex]})
     // next()
 })
