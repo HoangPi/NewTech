@@ -24,8 +24,8 @@ export const ThesisDetail = () => {
             return
         }
         // 86400000 = 24 * 60 * 60 * 24
-        if((date - Date.now())/(86400000)<7){
-            alert("Defense date must be at least 7 days after current date")
+        if((date - Date.now())/(86400000)<1){
+            alert("Defense date must be at least one day after current date")
             return
         }
         if(typeof(defense) === 'undefined'){

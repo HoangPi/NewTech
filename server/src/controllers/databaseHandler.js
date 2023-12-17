@@ -525,11 +525,13 @@ async function getDefenseDate(req,res){
 }
 async function getInstructorDefense(req,res){
     try{
-        if(typeof(req.session.instructor)==='undefined' || req.session.instructorinfo === null){
+        if(typeof(req.session.instructorinfo)==='undefined' || req.session.instructorinfo === null){
             res.json({})
         }
         else{
-            const docs = await Defense.find({instructor: req.session.instructorinfo._id})
+            const docs = await Defense.find()
+                .populate('instructor')
+                .populate('thesis')
             res.json({defense: [...docs]})
         }
         

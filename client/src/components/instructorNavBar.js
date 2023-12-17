@@ -19,21 +19,21 @@ export const InstructorNavBar = () => {
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="offcanvas offcanvas-end " style={{ width: '300px' }} tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                    
+
                     <div class="offcanvas-header border-bottom border-black border-2">
                         <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Homepage</h5>
                         <button type="button" class="btn-close " data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    
+
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                            
+
                             <li class="nav-item">
                                 <a href="/instructorhomepage">
                                     <button className="btn bg-transparent fs-6 px-0" type="button">Home</button>
                                 </a>
                             </li>
-                            
+
                             <li class="nav-item">
                                 <a href="/addthesis">
                                     <button className="btn bg-transparent fs-6 px-0" type="submit">Add Thesis</button>
@@ -60,9 +60,14 @@ export const InstructorNavBar = () => {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                    <a href="#">
-                                        <button className="btn bg-transparent fs-6 px-0 " type="button" onClick={handleSignOut}>Sign out</button>
-                                    </a>
+                                <a href="/defensedate">
+                                    <button className="btn bg-transparent fs-6 px-0" type="submit">Defense dates</button>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#">
+                                    <button className="btn bg-transparent fs-6 px-0 " type="button" onClick={handleSignOut}>Sign out</button>
+                                </a>
                             </li>
                         </ul>
                     </div>
