@@ -24,6 +24,7 @@ export const ProposeThesis = () => {
             proposeThesis(thesisName,option1 ? newCategory : categories[mainIndex].name,description)
                 .then(response=>{
                     console.log(response)
+                    alert("Thesis created")
                 })
         }
     }

@@ -8,6 +8,7 @@ const Task = require('../models/task.js')
 const Score = require('../models/score.js')
 const PendingThesis = require('../models/pendingThesis.js')
 const PendingStudent = require('../models/pendingStudent.js')
+const Defense = require('../models/defense.js')
 
 function setStudentSession(req, res) {
     Student.findOne({ id: req.body.id })
@@ -32,7 +33,7 @@ async function get1Student(req, res) {
         .then((studentinfo) => {
             res.json({ studentinfo })
         })
-        .catch(err=>{res.json({message:err})})
+        .catch(err => { res.json({ message: err }) })
 }
 async function editStudent(req, res) {
     const doc = await Student.findOneAndUpdate({ id: req.body.studentinfo.id },
@@ -141,14 +142,14 @@ async function getTasks(req, res) {
         })
 }
 async function addTasks(req, res) {
-    try{
+    try {
         for (let task of req.body.tasks) {
-        t = new Task({
-            thesisid: req.body.thesisID,
-            job: task,
-            confirm: false,
-        })
-        await t.save()
+            t = new Task({
+                thesisid: req.body.thesisID,
+                job: task,
+                confirm: false,
+            })
+            await t.save()
         }
         //calculate the progress
         const tasks = await Task.find({ thesisid: req.body.thesisID })
@@ -163,20 +164,20 @@ async function addTasks(req, res) {
         }
         res.json({ status: true })
     }
-    catch{
-        res.json({status:false})
+    catch {
+        res.json({ status: false })
     }
 }
 async function getThesisByID(req, res) {
-    
+
     Thesis.findOne({ _id: req.body.id })
         .then((result) => {
             // console.log(result)
             res.json({ thesis: result })
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err)
-            res.json({status:false})
+            res.json({ status: false })
         })
 }
 async function submitTasks(req, res) {
@@ -210,93 +211,93 @@ async function confirmTask(req, res) {
         res.json({ status: false })
     }
 }
-async function addScore(req,res){
-    try{
-        await Thesis.findOneAndUpdate({_id:req.body.thesisid},{status:'Finished'})
-        const students = await Student.find({thesisid:req.body.thesisid})
-        for(let student of students){
-            await Student.findOneAndUpdate({id:student.id},{thesisid:''})
+async function addScore(req, res) {
+    try {
+        await Thesis.findOneAndUpdate({ _id: req.body.thesisid }, { status: 'Finished' })
+        const students = await Student.find({ thesisid: req.body.thesisid })
+        for (let student of students) {
+            await Student.findOneAndUpdate({ id: student.id }, { thesisid: '' })
             let score = Score({
-                thesisid:req.body.thesisid,
-                studentid:student.id,
-                score:req.body.score,
+                thesisid: req.body.thesisid,
+                studentid: student.id,
+                score: req.body.score,
             })
             await score.save()
         }
-        res.json({status:true})
+        res.json({ status: true })
     }
-    catch(err){
+    catch (err) {
         console.log(err)
-        res.json({status:false})
+        res.json({ status: false })
     }
 }
-async function getScore(req,res){
-    try{
+async function getScore(req, res) {
+    try {
         console.log(req.body)
-        const scores = await Score.find({thesisid:req.body.thesisid})
+        const scores = await Score.find({ thesisid: req.body.thesisid })
         var students = []
-        for(let score of scores){
-            let temp = await Student.findOne({id:score.studentid})
+        for (let score of scores) {
+            let temp = await Student.findOne({ id: score.studentid })
             students.push(temp)
         }
-        res.json({studentList:students,scores: scores})
+        res.json({ studentList: students, scores: scores })
     }
-    catch(error){
+    catch (error) {
         console.log(error)
-        res.json({status:false})
+        res.json({ status: false })
     }
 }
-async function editInstructorProfile(req,res){
-    try{
-        if(typeof(req.session.instructorinfo)==='undefined' || req.session.instructorinfo===null){
-            res.json({status:false})
+async function editInstructorProfile(req, res) {
+    try {
+        if (typeof (req.session.instructorinfo) === 'undefined' || req.session.instructorinfo === null) {
+            res.json({ status: false })
         }
-        else{
-            Instructor.findOneAndUpdate({_id:req.session.instructorinfo._id},{
-                phone:req.body.phone,
-                address:req.body.address,
+        else {
+            Instructor.findOneAndUpdate({ _id: req.session.instructorinfo._id }, {
+                phone: req.body.phone,
+                address: req.body.address,
             },
-            {returnOriginal:false})
-                .then(doc=>{
-                    req.session.instructorinfo=doc
-                    res.json({instructorinfo:doc})
+                { returnOriginal: false })
+                .then(doc => {
+                    req.session.instructorinfo = doc
+                    res.json({ instructorinfo: doc })
                 })
         }
     }
-    catch(error){
+    catch (error) {
         console.log(error)
-        res.json({status:false})
+        res.json({ status: false })
     }
 }
-function suspendThesis(req,res){
-    if(typeof(req.session.instructorinfo)==='undefined'|| req.session.instructorinfo===null){
-        res.json({status:false,message:"instructor session does not exist"})
+function suspendThesis(req, res) {
+    if (typeof (req.session.instructorinfo) === 'undefined' || req.session.instructorinfo === null) {
+        res.json({ status: false, message: "instructor session does not exist" })
     }
-    else{
-        Thesis.findOneAndUpdate({_id:req.body.thesisid},{status:'Suspended',progress:0})
-            .then(result=>{
-                Student.updateMany({thesisid:req.body.thesisid},{thesisid:''})
-                    .then(r=>{
+    else {
+        Thesis.findOneAndUpdate({ _id: req.body.thesisid }, { status: 'Suspended', progress: 0 })
+            .then(result => {
+                Student.updateMany({ thesisid: req.body.thesisid }, { thesisid: '' })
+                    .then(r => {
                         console.log("Removed")
-                        res.json({status:true})
+                        res.json({ status: true })
                     })
-                    .catch(err=>{
+                    .catch(err => {
                         console.log(err)
-                        res.json({status:false})
+                        res.json({ status: false })
                     })
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err)
-                res.json({result:false})
+                res.json({ result: false })
             })
     }
-    
+
 }
-function proposeThesis(req,res){
-    if(typeof(req.session.instructorinfo)==='undefined' || req.session.instructorinfo===null){
-        res.json({message:"Instructor session does not exist"})
+function proposeThesis(req, res) {
+    if (typeof (req.session.instructorinfo) === 'undefined' || req.session.instructorinfo === null) {
+        res.json({ message: "Instructor session does not exist" })
     }
-    else{
+    else {
         const pd = new PendingThesis({
             name: req.body.thesisname,
             instructorid: req.session.instructorinfo._id,
@@ -304,136 +305,138 @@ function proposeThesis(req,res){
             description: req.body.description,
         })
         pd.save()
-            .then(document=>{
-                res.json({doc: document})
+            .then(document => {
+                res.json({ doc: document })
             })
     }
 }
-function getAllPendingThesis(req,res){
+function getAllPendingThesis(req, res) {
     PendingThesis.find()
-        .then(docs=>{
+        .then(docs => {
             // console.log(docs)
-            res.json({theses:docs})
+            res.json({ theses: docs })
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err)
-            res.json({message:"There is no avaiable thesis"})
+            res.json({ message: "There is no avaiable thesis" })
         })
 }
-function getAllRelatedToPendingThesis(req,res){
-    PendingThesis.findOne({_id:req.body.thesisid})
-        .then(pt=>{
-            Instructor.findOne({_id:pt._doc.instructorid})
-                .then(ins=>{
-                    res.json({thesis:pt._doc,instructor:ins._doc})
+function getAllRelatedToPendingThesis(req, res) {
+    PendingThesis.findOne({ _id: req.body.thesisid })
+        .then(pt => {
+            Instructor.findOne({ _id: pt._doc.instructorid })
+                .then(ins => {
+                    res.json({ thesis: pt._doc, instructor: ins._doc })
                 })
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err)
-            res.json({message:"Fail to retrive data"})
+            res.json({ message: "Fail to retrive data" })
         })
 }
-function JoinThesis(req,res){
-    try{
-        if(typeof(req.session.studentinfo)==='undefined' || req.session.studentinfo === null){
-            res.json({confirm:false})
+function JoinThesis(req, res) {
+    try {
+        if (typeof (req.session.studentinfo) === 'undefined' || req.session.studentinfo === null) {
+            res.json({ confirm: false })
         }
-        else{
-            PendingStudent.exists({studentid:req.session.studentinfo._id,
-                                thesisid:req.body.thesisid})
-                .then(check=>{
-                    if(check){
+        else {
+            PendingStudent.exists({
+                studentid: req.session.studentinfo._id,
+                thesisid: req.body.thesisid
+            })
+                .then(check => {
+                    if (check) {
                         res.json({})
                     }
-                    else{
+                    else {
                         const temp = new PendingStudent({
-                            thesisid:req.body.thesisid,
-                            studentid:req.session.studentinfo,
+                            thesisid: req.body.thesisid,
+                            studentid: req.session.studentinfo,
                         })
                         temp.save()
-                            .then(doc=>{
-                                res.json({confirm:true})
+                            .then(doc => {
+                                res.json({ confirm: true })
                             })
                     }
                 })
-            
+
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err)
-        res.json({confirm:false,error:err})
+        res.json({ confirm: false, error: err })
     }
 }
-function CancelRequest(req,res){
-    try{
-        if(typeof(req.session.studentinfo)==='undefined'||req.session.studentinfo===null){
-            res.json({confirm:false})
+function CancelRequest(req, res) {
+    try {
+        if (typeof (req.session.studentinfo) === 'undefined' || req.session.studentinfo === null) {
+            res.json({ confirm: false })
         }
-        else{
-            PendingStudent.deleteOne({thesisid:req.body.thesisid,studentid:req.session.studentinfo._id})
-                .then(()=>{
-                    res.json({confirm:true})
+        else {
+            PendingStudent.deleteOne({ thesisid: req.body.thesisid, studentid: req.session.studentinfo._id })
+                .then(() => {
+                    res.json({ confirm: true })
                 })
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err)
-        res.json({error:err,confirm:false})
+        res.json({ error: err, confirm: false })
     }
 }
-function getPendingTheses(req,res){
-    try{
-        if(typeof(req.session.instructorinfo)==='undefined'||req.session.instructorinfo===null){
+function getPendingTheses(req, res) {
+    try {
+        if (typeof (req.session.instructorinfo) === 'undefined' || req.session.instructorinfo === null) {
             res.json({})
         }
-        else{
-            PendingThesis.find({instructorid:req.session.instructorinfo._id})
-                .then(async (docs)=>{
-                    var stdBatch=[]
-                    for(let doc of docs){
-                        let temp = await PendingStudent.find({thesisid:doc._doc._id}).populate('studentid')
-                        try{
+        else {
+            PendingThesis.find({ instructorid: req.session.instructorinfo._id })
+                .then(async (docs) => {
+                    var stdBatch = []
+                    for (let doc of docs) {
+                        let temp = await PendingStudent.find({ thesisid: doc._doc._id }).populate('studentid')
+                        try {
                             console.log(temp)
                             stdBatch.push(temp)
                         }
-                        catch(ex){
+                        catch (ex) {
                             //For collections that have no student
                         }
                     }
-                    res.json({theses:docs,confirm:true, students:stdBatch})
+                    res.json({ theses: docs, confirm: true, students: stdBatch })
                 })
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err)
-        res.json({confirm:false})
+        res.json({ confirm: false })
 
     }
 }
-function stdPendingThesis(req,res){
+function stdPendingThesis(req, res) {
     // This is currently not in used
-    try{
-        if(typeof(req.session.instructorinfo)==='undefined'||req.session.instructorinfo===null){
+    try {
+        if (typeof (req.session.instructorinfo) === 'undefined' || req.session.instructorinfo === null) {
             res.json({})
         }
-        else{
-            PendingThesis.find({instructorid:req.session.instructorinfo._id})
-                .then(docs=>{
-                    res.json({theses:docs,confirm:true})
+        else {
+            PendingThesis.find({ instructorid: req.session.instructorinfo._id })
+                .then(docs => {
+                    res.json({ theses: docs, confirm: true })
                 })
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err)
-        res.json({confirm:false})
+        res.json({ confirm: false })
     }
 }
-function confirmRequest(req,res){
-    try{
-        if(typeof(req.session.instructorinfo)==='undefined' || req.session.instructorinfo===null){
-            res.json({confirm:false,message:'Session not found'})
+function confirmRequest(req, res) {
+    try {
+        if (typeof (req.session.instructorinfo) === 'undefined' || req.session.instructorinfo === null) {
+            res.json({ confirm: false, message: 'Session not found' })
         }
-        else{
+        else {
             const t = new Thesis({
                 _id: req.body.thesis._id,
                 name: req.body.thesis.name,
@@ -445,36 +448,96 @@ function confirmRequest(req,res){
             })
             t.save()
                 .then(async () => {
-                    for(let id of req.body.students){
-                        await Student.findOneAndUpdate({id:id[0]},{thesisid:req.body.thesis._id})
-                        await PendingStudent.deleteMany({studentid:id[1]})
+                    for (let id of req.body.students) {
+                        await Student.findOneAndUpdate({ id: id[0] }, { thesisid: req.body.thesis._id })
+                        await PendingStudent.deleteMany({ studentid: id[1] })
                     }
                     await PendingThesis.findByIdAndDelete(req.body.thesis._id)
-                    res.json({confirm:true})
+                    res.json({ confirm: true })
                 })
         }
+    }
+    catch (err) {
+        console.log(err)
+        res.json({ confirm: false })
+    }
+}
+async function removePropose(req, res) {
+    try {
+        if (typeof (req.session.instructorinfo) === 'undefined' || req.session.instructorinfo === null) {
+            res.json({ message: "Session not found" })
+        }
+        else {
+            await PendingThesis.findByIdAndDelete(req.body.thesis)
+            await PendingStudent.deleteMany({ thesisid: req.body.thesis })
+            res.json({ confirm: true })
+        }
+    }
+    catch (err) {
+        console.log(err)
+        res.json({ confirm: false })
+    }
+    // PendingThesis.deleteOne(req.body.thesis)
+}
+function getAllInstructor(req, res) {
+    try {
+        Instructor.find()
+            .then(docs => {
+                var instructors = []
+                for(let doc of docs){
+                    instructors.push(doc._doc)
+                }
+                res.json({ instructors })
+            })
+    }
+
+    catch (err) {
+        console.log(err)
+        res.json({ message: err })
+    }
+}
+function setDefendDate(req,res){
+    try{
+        const defense = new Defense({
+            instructor: req.body.instructorid,
+            thesis: req.body.thesisid,
+            date: new Date(req.body.date),
+        })
+        defense.save()
+            .then((response) => {
+                res.json({confirm: true})
+            })
     }
     catch(err){
         console.log(err)
         res.json({confirm:false})
     }
 }
-async function removePropose(req,res){
+async function getDefenseDate(req,res){
     try{
-        if(typeof(req.session.instructorinfo) === 'undefined' || req.session.instructorinfo===null){
-            res.json({message:"Session not found"})
-        }
-        else{
-            await PendingThesis.findByIdAndDelete(req.body.thesis)
-            await PendingStudent.deleteMany({thesisid:req.body.thesis})
-            res.json({confirm:true})
-        }
+        const doc = await Defense.findOne({thesis:req.body.thesisid})
+        res.json({defense: doc})
     }
     catch(err){
         console.log(err)
-        res.json({confirm:false})
+        res.json({error:err})
     }
-    // PendingThesis.deleteOne(req.body.thesis)
+}
+async function getInstructorDefense(req,res){
+    try{
+        if(typeof(req.session.instructor)==='undefined' || req.session.instructorinfo === null){
+            res.json({})
+        }
+        else{
+            const docs = await Defense.find({instructor: req.session.instructorinfo._id})
+            res.json({defense: [...docs]})
+        }
+        
+    }
+    catch(err){
+        console.log(err)
+        res.json({error:err})
+    }
 }
 module.exports = {
     setStudentSession,
@@ -503,4 +566,8 @@ module.exports = {
     stdPendingThesis,
     confirmRequest,
     removePropose,
+    getAllInstructor,
+    setDefendDate,
+    getDefenseDate,
+    getInstructorDefense,
 }

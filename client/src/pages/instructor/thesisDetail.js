@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { addScore, addTask, confirmSubmission, getAllRelatedToScore, getInstructorSession, getStudentsInThesis, getTasksInThesis, getThesisSession, suspendThesis } from "../../api/apiColections"
+import { addScore, addTask, confirmSubmission, getAllInstructor, getAllRelatedToScore, getDefenseDate, getInstructorSession, getStudentsInThesis, getTasksInThesis, getThesisSession, setDefendDate, suspendThesis } from "../../api/apiColections"
 import { useNavigate } from "react-router-dom"
+import { DatePicker, Space } from 'antd';
 
 export const ThesisDetail = () => {
     const navigate = useNavigate()
@@ -10,26 +11,81 @@ export const ThesisDetail = () => {
     const [tasks, setTasks] = useState([])
     const [taskInput, setTaskInput] = useState('')
     const [studentList, setStudentList] = useState([])
-    const [score,setScore]=useState()
+    const [score, setScore] = useState()
+    const [instructorList, setInstructorList] = useState([])
+    const [defender, setDefender] = useState('')
+    const [date,setDate] = useState(Date.now())
+    const [instructor,setInstructor] = useState()
+    const [defense,setDefense] = useState()
 
-    const handleSuspend=(ev)=>{
+    const handleDefend =() =>{
+        if(defender._id===instructor._id){
+            alert("Thesis committee cannot be yourself")
+            return
+        }
+        // 86400000 = 24 * 60 * 60 * 24
+        if((date - Date.now())/(86400000)<7){
+            alert("Defense date must be at least 7 days after current date")
+            return
+        }
+        if(typeof(defense) === 'undefined'){
+            setDefendDate(defender._id,thesis._id,date)
+                .then(response => {
+                    if(response.confirm){
+                        alert('Thesis defend date is set')
+                        window.location.reload()
+                    }
+                    else{
+                        alert("Internal error")
+                    }
+                })
+        }
+        else{
+            alert("This thesis already has a defense appointment")
+        }
+        
+    }
+    const onChange = (date, dateString) => {
+        setDate(date)
+        console.log(date)
+      };
+    const handleDefenderOnChange = (ev) => {
+        setDefender(instructorList[Number(ev.target.value)])
+        // console.log(ev.target.value)
+    }
+    const handleSuspend = (ev) => {
         suspendThesis(thesis._id)
-            .then(respone=>{
+            .then(respone => {
                 respone.status ? alert('Thesis suspended') : alert('Internal error')
             })
     }
-    const handleScoring =()=>{
-        addScore(thesis._id,score)
-            .then(result=>{
-                result ? alert("sucess") :alert("fail")
+    const handleScoring = () => {
+        if(typeof(defense) ==='undefined'){
+            alert("Thesis has not had a defense date yet")
+            return
+        }
+        let temp = new Date(defense.date)
+        temp = temp.getTime()
+
+        if((temp - Date.now()) > 0){
+            alert("Please wait for the defense date to evaluate this thesis")
+            return
+        }
+        if(score==='' || typeof(score) === 'undefined'){
+            alert("Score must not be empty")
+            return
+        }
+        addScore(thesis._id, score)
+            .then(result => {
+                result ? alert("sucess") : alert("fail")
             })
     }
-    const handleScoreOnChange =(ev)=>{
+    const handleScoreOnChange = (ev) => {
         const temp = Number(ev.target.value)
-        if(temp>10){
+        if (temp > 10) {
             setScore(10)
         }
-        else if(temp<0){
+        else if (temp < 0) {
             setScore(0)
         }
         else setScore(temp)
@@ -77,33 +133,46 @@ export const ThesisDetail = () => {
                     return
                 }
                 else {
+                    setInstructor(instructor.instructorinfo)
                     getThesisSession()
-                        .then((value) => {
+                        .then(async (value) => {
                             // console.log(value.thesis)
                             setThesis(value.thesis)
-                            if(value.thesis.status==="Finished"){
+                            let temp = await getDefenseDate(value.thesis._id)
+                            if(temp.defense){
+                                setDefense(temp.defense)
+                                setDate(temp.defense.date)
+                            }
+                            if (value.thesis.status === "Finished") {
                                 getAllRelatedToScore(value.thesis._id)
-                                    .then(respone=>{
+                                    .then(respone => {
                                         // console.log(respone)
                                         setStudentList(respone.studentList)
                                         setScore(respone.scores[0].score)
                                         setIsloading(false)
                                     })
                             }
-                            else{
-                                getStudentsInThesis(value.thesis._id)
-                                    .then((s) => {
-                                        console.log(s)
-                                        setStudentList(s.studentList)
-                                        getTasksInThesis(value.thesis._id)
-                                            .then((tasks) => {
-                                                console.log(tasks.tasks)
-                                                setTasks(tasks.tasks)
+                            else {
+                                getAllInstructor()
+                                    .then(i => {
+                                        console.log(i.instructors[0])
+                                        setDefender(i.instructors[0])
+                                        setInstructorList(i.instructors)
+                                        getStudentsInThesis(value.thesis._id)
+                                            .then((s) => {
+                                                console.log(s)
+                                                setStudentList(s.studentList)
+                                                getTasksInThesis(value.thesis._id)
+                                                    .then((tasks) => {
+                                                        console.log(tasks.tasks)
+                                                        setTasks(tasks.tasks)
+                                                    })
+                                                    .finally(() => setIsloading(false))
                                             })
-                                            .finally(() => setIsloading(false))
                                     })
+
                             }
-                            
+
                         })
                 }
             })
@@ -115,8 +184,8 @@ export const ThesisDetail = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div style={{ paddingInline:'25%', paddingTop: '25px'}}>
-            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
+        <div style={{ paddingInline: '25%', paddingTop: '25px' }}>
+            <div style={{ backgroundColor: '#FFFFFF' }} class="border border-success p-2 mb-2 border-opacity-75">
                 <h3>Project {thesis.name}</h3>
                 <h6>Category: {thesis.category}</h6>
                 <div class="form-floating mb-3">
@@ -124,7 +193,7 @@ export const ThesisDetail = () => {
                     <label disabled={true} for="floatingPlaintextInput">Project description:</label>
                 </div>
             </div>
-            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
+            <div style={{ backgroundColor: '#FFFFFF' }} class="border border-success p-2 mb-2 border-opacity-75">
                 <h3>Participants: </h3>
                 <form class="row g-3">
                     <div class="col-md-2">
@@ -154,19 +223,19 @@ export const ThesisDetail = () => {
                         </div>
                     </form>)}
             </div>
-            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
+            <div style={{ backgroundColor: '#FFFFFF' }} class="border border-success p-2 mb-2 border-opacity-75">
                 <h3>Task details: </h3>
                 <div class="input-group mb-3">
-                    <input disabled={thesis.status==='Finished' || thesis.status==='Suspended'}  onChange={handleTaskInputOnChange} type="text" class="form-control" placeholder="New task" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                    <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'}  onClick={handleAddNewTask} class="btn btn-outline-secondary" type="button" id="button-addon2">Add new task</button>
+                    <input disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} onChange={handleTaskInputOnChange} type="text" class="form-control" placeholder="New task" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                    <button disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} onClick={handleAddNewTask} class="btn btn-outline-secondary" type="button" id="button-addon2">Add new task</button>
                 </div>
                 {taskList.map((value, key) =>
                     <div class="input-group mb-3">
                         <input disabled={true} value={value} type="text" class="form-control" placeholder="Task" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                        <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'}   onClick={handleRemoveTask} id={key} class="btn btn-outline-secondary" type="button" >Remove</button>
+                        <button disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} onClick={handleRemoveTask} id={key} class="btn btn-outline-secondary" type="button" >Remove</button>
                     </div>
                 )}
-                <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'}   onClick={handleAddTask} type="button" class="btn btn-primary">Add tasks</button>
+                <button disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} onClick={handleAddTask} type="button" class="btn btn-primary">Add tasks</button>
                 <h3>Pending tasks: </h3>
                 {tasks.map((value, key) =>
                     (value.confirm === false) &&
@@ -191,16 +260,29 @@ export const ThesisDetail = () => {
                     </div>
                 )}
             </div>
-            <div style={{backgroundColor:'#FFFFFF'}} class="border border-success p-2 mb-2 border-opacity-75">
+            <div style={{ backgroundColor: '#FFFFFF' }} class="border border-success p-2 mb-2 border-opacity-75">
+                <h3>Set defend date </h3>
+                <DatePicker onChange={onChange} />
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">Defender</label>
+                    <select onChange={handleDefenderOnChange} class="form-select" id="inputGroupSelect01">
+                        {instructorList.map((value, key) => {
+                            return <option value={key}>{value.fullname}</option>
+                        })}
+                    </select>
+                </div>
+                <button disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} onClick={handleDefend} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Set</button>
+            </div>
+            <div style={{ backgroundColor: '#FFFFFF' }} class="border border-success p-2 mb-2 border-opacity-75">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Score</span>
-                    <input disabled={thesis.status==='Finished' || thesis.status==='Suspended'}  onChange={handleScoreOnChange} value={score} type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-                    <button disabled={thesis.status==='Finished' || thesis.status==='Suspended'} onClick={handleScoring} type="button" class="btn btn-primary">Confirm</button>
+                    <input disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} onChange={handleScoreOnChange} value={score} type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                    <button disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} onClick={handleScoring} type="button" class="btn btn-primary">Confirm</button>
                 </div>
             </div>
             <button onClick={handleReturn} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Return</button>
             <button onClick={handleRefresh} style={{ marginRight: '30px' }} type="button" class="btn btn-primary">Refresh</button>
-            <button onClick={handleSuspend} disabled={thesis.status==='Finished' || thesis.status==='Suspended'} type="button" class="btn btn-danger">Suspend</button>
+            <button onClick={handleSuspend} disabled={thesis.status === 'Finished' || thesis.status === 'Suspended'} type="button" class="btn btn-danger">Suspend</button>
         </div>
     )
 }
