@@ -15,6 +15,7 @@ import { ProposeThesis } from './pages/instructor/proposeThesis.js'
 import { JoinThesis } from './pages/student/joinThesis.js'
 import { ViewPendingThesis } from './pages/student/viewPendingThesis.js'
 import { PendingTheses } from './pages/instructor/pendingTheses.js'
+import { Defense } from './pages/instructor/defense.js'
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
           <Route path='/jointhesis' element={<JoinThesis/>}></Route>
           <Route path='/pendingthesis' element={<ViewPendingThesis></ViewPendingThesis>}></Route>
           <Route path='/pendingtheses' element={<PendingTheses/>}></Route>
+          <Route path='/defensedate' element={<Defense></Defense>}></Route>
         </Routes>
       </Router>
     </div>
