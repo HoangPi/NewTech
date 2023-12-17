@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { cancleRequest, getInstructorOfPendingThesis, joinThesis } from "../../api/apiColections"
+import { StudentNavBar } from "../../components/studentNavBar"
 
 export const ViewPendingThesis = () => {
     const [thesis, setThesis] = useState()
@@ -50,7 +51,11 @@ export const ViewPendingThesis = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div style={{paddingLeft:'28%', paddingRight:'15%'}}>
+        <>
+        <div>
+            <StudentNavBar></StudentNavBar>
+        </div>
+        <div style={{paddingLeft:'28%', paddingRight:'15%', paddingTop:'100px'}}>
             <div class="card w-75 mb-3">
                 <h4 style={{borderBottom:'1px solid black', height:'40px'}}>Instructor</h4>
                 <div class="card-body">
@@ -68,8 +73,10 @@ export const ViewPendingThesis = () => {
                     <p class="card-text">{thesis.description}</p>
                     <a onClick={handleJoin} style={{marginRight:'20px'}} class="btn btn-primary">Join</a>
                     <a onClick={handleCancel} class="btn btn-primary">Cancle request</a>
+                    <a href="/jointhesis" class="btn btn-primary float-end">Return</a>
                 </div>
             </div>
         </div>
+        </>
     )
 }

@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import { getAllPendingThesis, getStudentSession } from "../../api/apiColections"
 import { useNavigate } from "react-router-dom"
+import { StudentNavBar } from "../../components/studentNavBar"
 
 export const JoinThesis=()=>{
     const navigate = useNavigate()
@@ -41,18 +42,21 @@ export const JoinThesis=()=>{
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return(
-        <div style={{paddingInline:'20%'}}>
-            {console.log(theses)}
-            {theses.map((value,map)=>
-                <div class="card" style={{width: "18rem;"}}>
-                    <div class="card-body">
+        <><div>
+            <StudentNavBar></StudentNavBar>
+        </div>
+        <div style={{ paddingInline: '20%', paddingTop: '100px' }}>
+                {console.log(theses)}
+                {theses.map((value, map) => <div class="card mb-3" style={{ width: "18rem;" }}>
+                    <div class="card-body ">
                         <h5 class="card-title">{value.name}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">{value.category}</h6>
                         <p class="card-text">{value.description}</p>
-                        <a href={"/pendingthesis?t="+value._id} class="card-link">Detail</a>
+                        <a href={"/pendingthesis?t=" + value._id}><button className="btn btn-primary fs-6 px-0 col-1 py-1" type="button">Detail</button></a>
+                        
                     </div>
                 </div>
-            )}
-        </div>
+                )}
+            </div></>
     )
 }

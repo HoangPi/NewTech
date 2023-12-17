@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { confirmRequest, getInstructorPendingTheses, getInstructorSession, removePropose } from "../../api/apiColections"
+import {InstructorNavBar} from '../../components/instructorNavBar.js'
 
 export const PendingTheses = () => {
     const navigate = useNavigate()
@@ -77,12 +78,16 @@ export const PendingTheses = () => {
         <div class="spinner-border ms-auto" aria-hidden="true"></div>
     </div>
     return (
-        <div style={{ paddingLeft: '20%' }}>
+        <>
+        <div>
+            <InstructorNavBar></InstructorNavBar>
+        </div>
+        <div style={{ paddingLeft: '20%',paddingTop:'100px' }}>
             {theses.map((value,key) => <>
 
-                <div style={{ marginBottom: '50px' }} class="card w-75">
-                    <h4 style={{ borderBottom: '1px solid black', height: '40px' }}>Students</h4>
-                    <div style={{ borderBottom: '2px solid black', paddingBottom:'20px'}} class="container text-center">
+                <div style={{ marginBottom: '50px' }} class="card w-75 shadow">
+                    <h4 style={{ borderBottom: '2px solid black', height: '40px' }} class="ps-3 pt-1">Students</h4>
+                    <div style={{ borderBottom: '1px solid black', paddingBottom:'20px'}} class="container text-center">
                         <div class="row">
                             <div style={{textAlign:'left'}} class="col">
                                 <h6>Name</h6>
@@ -102,14 +107,14 @@ export const PendingTheses = () => {
                                     <div style={{textAlign:'left'}} class='col'>{s.studentid.id}</div>
                                     <div style={{textAlign:'left'}} class='col'>{s.studentid.classid}</div>
                                     <div style={{textAlign:'left'}} class='col'>
-                                        <button info={[key,k]} onClick={handleDeny} style={{height:'25px', textAlign:'left'}} type="button" class="btn btn-outline-danger">Deny</button>
+                                        <button info={[key,k]} onClick={handleDeny} style={{height:'25px'}} type="button" class="btn btn-outline-danger pt-0">Deny</button>
                                     </div>
                                 </div>
                             )
                         })}
                             
                     </div>
-                    <h4 style={{ borderBottom: '1px solid black', height: '40px' }}>Thesis</h4>
+                    <h4 style={{ borderBottom: '1px solid black', height: '40px' }} class="ps-3 pt-1">Thesis</h4>
                     <div class="card-body">
                         <h5 class="card-title">{value.name}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">{value.category}</h6>
@@ -122,5 +127,6 @@ export const PendingTheses = () => {
             )}
 
         </div>
+        </>
     )
 }
